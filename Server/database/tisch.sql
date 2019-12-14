@@ -9,7 +9,8 @@ USE tisch;
 CREATE TABLE projects (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(127) NOT NULL,
-	description VARCHAR(2047) NULL
+	creation_date DATETIME NOT NULL,
+	description VARCHAR(2047)
 );
 
 
@@ -95,7 +96,7 @@ CREATE TABLE marks (
 	session_id INT NOT NULL,
 		FOREIGN KEY(session_id) REFERENCES sessions(id),
 	title VARCHAR(127) NOT NULL,
-	description TEXT NULL
+	description TEXT
 );
 
 
