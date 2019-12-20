@@ -1,3 +1,5 @@
+-- last tested with mariadb Ver 15.1 Distrib 10.4.10-MariaDB
+
 CREATE DATABASE tisch
 	CHARACTER SET = 'utf8mb4'
 	COLLATE = 'utf8mb4_german2_ci';
