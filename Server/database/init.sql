@@ -66,21 +66,42 @@ CREATE TABLE contributors (
 );
 
 
--- roles for contributors associated with different privileges
-CREATE TABLE roles (
+CREATE TABLE project_roles (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(63) UNIQUE NOT NULL,
 	description VARCHAR(127)
 );
 
 
-CREATE TABLE role_per_contributor (
+-- roles for contributors associated with different privileges
+CREATE TABLE session_roles (
 	id INT AUTO_INCREMENT PRIMARY KEY,
+	title VARCHAR(63) UNIQUE NOT NULL,
+	description VARCHAR(127)
+);
+
+
+CREATE TABLE role_per_project (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	project_id INT NOT NULL,
+		FOREIGN KEY(project_id) REFERENCES projects(id),
 	contributor_id INT NOT NULL,
 		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
 	role_id INT NOT NULL,
-		FOREIGN KEY(role_id) REFERENCES roles(id)
+		FOREIGN KEY(role_id) REFERENCES project_roles(id)
 );
+
+
+CREATE TABLE role_per_session (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	session_id INT NOT NULL,
+		FOREIGN KEY(session_id) REFERENCES sessions(id),
+	contributor_id INT NOT NULL,
+		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
+	role_id INT NOT NULL,
+		FOREIGN KEY(role_id) REFERENCES session_roles(id)
+);
+
 
 
 
