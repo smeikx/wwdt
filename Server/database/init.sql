@@ -11,7 +11,7 @@ USE tisch;
 CREATE TABLE projects (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(127) NOT NULL,
-	creation_date DATETIME NOT NULL,
+	creation_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	description VARCHAR(2047)
 );
 
@@ -43,6 +43,7 @@ CREATE TABLE recordings (
 		FOREIGN KEY(session_id) REFERENCES sessions(id),
 	media_type_id INT,
 		FOREIGN KEY(media_type_id) REFERENCES media_types(id),
+	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMPDEFAULT CURRENT_TIMESTAMP,
 	file_path VARCHAR(255) NOT NULL UNIQUE
 );
 
@@ -85,7 +86,7 @@ CREATE TABLE uploads (
 		FOREIGN KEY(session_id) REFERENCES sessions(id),
 	contributor_id INT NOT NULL,
 		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
-	upload_time DATETIME NOT NULL,
+	upload_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	file_path VARCHAR(511) UNIQUE NOT NULL,
 	media_type INT,
 		FOREIGN KEY(media_type) REFERENCES media_types(id)
@@ -123,7 +124,7 @@ CREATE TABLE timestamps_per_mark (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	mark_id INT NOT NULL,
 		FOREIGN KEY(mark_id) REFERENCES marks(id),
-	`timestamp` DATETIME NOT NULL
+	`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 
