@@ -103,6 +103,15 @@ CREATE TABLE role_per_session (
 );
 
 
+-- allows to track who participated in a session without them directly uploading anything
+CREATE TABLE contributors_per_session (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	session_id INT NOT NULL,
+		FOREIGN KEY(session_id) REFERENCES sessions(id),
+	contributor_id INT NOT NULL,
+		FOREIGN KEY(contributor_id) REFERENCES contributors(id)
+);
+
 
 
 -- Paths match the following pattern:
