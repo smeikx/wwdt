@@ -22,10 +22,16 @@ CREATE TABLE sessions (
 	title VARCHAR(127) NOT NULL,
 	project_id INT NOT NULL,
 		FOREIGN KEY(project_id) REFERENCES projects(id),
-	start_time DATETIME NOT NULL,
-	end_time DATETIME NOT NULL
 );
 
+
+CREATE TABLE session_timestamps (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	session_id INT NOT NULL,
+		FOREIGN KEY(session_id) REFERENCES sessions(id),
+	start_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	end_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
 
 -- known types of media files
