@@ -123,6 +123,8 @@ CREATE TABLE uploads (
 	contributor_id INT NOT NULL,
 		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
 	upload_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	upload_name VARCHAR(255) NOT NULL,
+	display_name VARCHAR(255) NOT NULL,
 	file_path VARCHAR(511) UNIQUE NOT NULL,
 	media_type INT,
 		FOREIGN KEY(media_type) REFERENCES media_types(id)
