@@ -38,7 +38,7 @@ Eine `Session` umfasst sämtliche Daten, die während und nach einer Diskussion 
 
 ### `Markers`
 
-Bei `Markers` handelt es sich um Datenbehälter, die zumindest aus einem *Timestamp* und einem *Titel* bestehen. Weiters können sie eine *Beschreibung, Tags, URLs* und *Uploads* beinhalten.
+Bei `Markers` handelt es sich um Datenbehälter, die zumindest aus einem *Timestamp* und einem *Titel* bestehen. Weiters können sie eine *Beschreibung, Tags* und *Uploads* beinhalten.
 
 Jeder *Upload* wird automatisch an einen `Marker` gebunden, ein *Upload* kann aber beliebig oft von anderen `Markers` referenziert werden.
 
