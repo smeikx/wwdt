@@ -135,6 +135,8 @@ CREATE TABLE marks (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	session_id INT NOT NULL,
 		FOREIGN KEY(session_id) REFERENCES sessions(id),
+	contributor_id INT NOT NULL,
+		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
 	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	title VARCHAR(127) NOT NULL,
 	description TEXT
@@ -193,6 +195,8 @@ CREATE TABLE arrangements (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	session_id INT NOT NULL,
 		FOREIGN KEY(session_id) REFERENCES sessions(id),
+	contributor_id INT NOT NULL,
+		FOREIGN KEY(contributor_id) REFERENCES contributors(id)
 );
 
 
