@@ -131,7 +131,7 @@ CREATE TABLE uploads (
 );
 
 
--- marks are flexible pieces of additional information
+-- marks are time-bound, user-generated pieces of information
 CREATE TABLE marks (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	session_id INT NOT NULL,
@@ -139,6 +139,14 @@ CREATE TABLE marks (
 	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	title VARCHAR(127) NOT NULL,
 	description TEXT
+);
+
+
+CREATE TABLE timestamps_per_mark (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	mark_id INT NOT NULL UNIQUE, -- not PRIMARY to potentially allow multiple timestamps per mark
+		FOREIGN KEY(mark_id) REFERENCES marks(id),
+	`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -155,15 +163,6 @@ CREATE TABLE tags_per_mark (
 		FOREIGN KEY(mark_id) REFERENCES marks(id),
 	tag_id INT NOT NULL,
 		FOREIGN KEY(tag_id) REFERENCES tags(id)
-);
-
-
--- deliberately allows multiple timestamps per mark
-CREATE TABLE timestamps_per_mark (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	mark_id INT NOT NULL,
-		FOREIGN KEY(mark_id) REFERENCES marks(id),
-	`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 
