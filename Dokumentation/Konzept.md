@@ -38,7 +38,7 @@ Eine `Session` umfasst sämtliche Daten, die während und nach einer Diskussion 
 
 ### `Marks`
 
-Bei `Marks` handelt es sich um Datenbehälter, die zumindest aus einem *Timestamp* und einem *Titel* bestehen. Weiters können sie eine *Beschreibung, Tags* und *Uploads* beinhalten.
+Bei `Marks` handelt es sich um Datenbehälter, die zumindest aus einem *Timestamp* und einem *Titel* bestehen. Weiters können sie eine *Beschreibung, Tags, Uploads* und *Bildpositionen* (Koordinatenpaar im Frame eines Video-Recordign-Streams) beinhalten.
 
 Jeder *Upload* wird automatisch an einen `Mark` gebunden, ein *Upload* kann aber beliebig oft von anderen `Marks` referenziert werden.
 
