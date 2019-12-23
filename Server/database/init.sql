@@ -288,7 +288,7 @@ CREATE TABLE permission_per_session_role (
 -- INSERTS ------------------------------------------------------------------
 
 
-INSERT INTO roles
+INSERT INTO project_roles
 	(title, description)
 VALUES
 	('Admin', 'may do anything'),
