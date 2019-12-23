@@ -181,12 +181,12 @@ CREATE TABLE frame_positions_per_timestamped_mark (
 
 
 -- files are always bound to a mark
-CREATE TABLE files_per_mark (
+CREATE TABLE uploads_per_mark (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	mark_id INT NOT NULL,
 		FOREIGN KEY(mark_id) REFERENCES marks(id),
-	file_id INT NOT NULL,
-		FOREIGN KEY(file_id) REFERENCES uploads(id)
+	upload_id INT NOT NULL,
+		FOREIGN KEY(upload_id) REFERENCES uploads(id)
 );
 
 
