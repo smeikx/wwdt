@@ -172,6 +172,8 @@ CREATE TABLE frame_positions_per_timestamped_mark (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	timestamped_mark_id INT NOT NULL,
 		FOREIGN KEY(timestamped_mark_id) REFERENCES timestamps_per_mark(id),
+	recording_id INT NOT NULL,
+		FOREIGN KEY(recording_id) REFERENCES recordings(id),
 	x FLOAT UNSIGNED NOT NULL,
 	y FLOAT UNSIGNED NOT NULL
 );
