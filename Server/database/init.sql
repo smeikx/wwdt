@@ -238,6 +238,52 @@ CREATE TABLE connections_per_arrangement (
 
 
 
+/* PERMISSIONS
+	are of type BIT(2)
+	------------------
+	00 → invisible
+	01 → visible
+	10 → editable
+*/
+
+CREATE TABLE permission_per_upload (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	upload_id INT NOT NULL,
+		FOREIGN KEY(upload_id) REFERENCES uploads(id),
+	contributor_id INT NOT NULL,
+		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
+	permission BIT(2) NOT NULL
+);
+
+
+CREATE TABLE permission_per_mark (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	mark_id INT NOT NULL,
+		FOREIGN KEY(mark_id) REFERENCES marks(id),
+	contributor_id INT NOT NULL,
+		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
+	permission BIT(2) NOT NULL
+);
+
+
+CREATE TABLE permission_per_arrangement (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	arrangement_id INT NOT NULL,
+		FOREIGN KEY(arrangement_id) REFERENCES arrangements(id),
+	contributor_id INT NOT NULL,
+		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
+	permission BIT(2) NOT NULL
+);
+
+
+CREATE TABLE permission_per_session_role (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	role_id INT NOT NULL,
+		FOREIGN KEY(role_id) REFERENCES session_roles(id),
+	permission BIT(2) NOT NULL
+);
+
+
 
 -- INSERTS ------------------------------------------------------------------
 
