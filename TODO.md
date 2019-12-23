@@ -3,7 +3,7 @@
 - [ ] passe Datenbank-Dump an die Spezifikation an
 	- [x] Rollen
 	- [ ] Zugriffsberechtigungen
-	- [ ] Arrangements
+	- [x] Arrangements
 
 - [ ] erstelle GraphQL-Schema
 

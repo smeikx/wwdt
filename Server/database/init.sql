@@ -73,7 +73,6 @@ CREATE TABLE project_roles (
 );
 
 
--- roles for contributors associated with different privileges
 CREATE TABLE session_roles (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(63) UNIQUE NOT NULL,
@@ -186,6 +185,51 @@ CREATE TABLE files_per_mark (
 		FOREIGN KEY(mark_id) REFERENCES marks(id),
 	file_id INT NOT NULL,
 		FOREIGN KEY(file_id) REFERENCES uploads(id)
+);
+
+
+
+CREATE TABLE arrangements (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	session_id INT NOT NULL,
+		FOREIGN KEY(session_id) REFERENCES sessions(id),
+);
+
+
+-- coordinates refer to a single cell and are relative to the centre of the grid
+-- (0, 0 is the cell in the centre)
+
+
+CREATE TABLE marks_per_arrangement (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	arrangement_id INT NOT NULL,
+		FOREIGN KEY(arrangement_id) REFERENCES arrangements(id),
+	mark_id INT NOT NULL,
+		FOREIGN KEY(mark_id) REFERENCES marks(id),
+	x INT NOT NULL,
+	y INT NOT NULL
+);
+
+
+CREATE TABLE labels_per_arrangement (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	arrangement_id INT NOT NULL,
+		FOREIGN KEY(arrangement_id) REFERENCES arrangements(id),
+	title VARCHAR(127) NOT NULL,
+	description VARCHAR(511),
+	x INT NOT NULL,
+	y INT NOT NULL
+);
+
+
+CREATE TABLE connections_per_arrangement (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	arrangement_id INT NOT NULL,
+		FOREIGN KEY(arrangement_id) REFERENCES arrangements(id),
+	from_x INT NOT NULL,
+	from_y INT NOT NULL,
+	to_x INT NOT NULL,
+	to_y INT NOT NULL
 );
 
 
