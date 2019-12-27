@@ -21,7 +21,7 @@ CREATE TABLE sessions (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(127) NOT NULL,
 	project_id INT NOT NULL,
-		FOREIGN KEY(project_id) REFERENCES projects(id),
+		FOREIGN KEY(project_id) REFERENCES projects(id)
 );
 
 
@@ -49,7 +49,7 @@ CREATE TABLE recordings (
 		FOREIGN KEY(session_id) REFERENCES sessions(id),
 	media_type_id INT,
 		FOREIGN KEY(media_type_id) REFERENCES media_types(id),
-	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMPDEFAULT CURRENT_TIMESTAMP,
+	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	file_path VARCHAR(255) NOT NULL UNIQUE
 );
 
