@@ -291,22 +291,3 @@ CREATE TABLE permission_per_project_role (
 	permission BIT(2) NOT NULL
 );
 
-
-
-
--- INSERTS ------------------------------------------------------------------
-
-
-INSERT INTO project_roles
-	(title, description)
-VALUES
-	('Admin', 'may do anything'),
-	('Projektleiter', 'kann Rollen verteilen');
-
-
-INSERT INTO media_types
-	(media_type)
-VALUES
-	('video'),
-	('audio'),
-	('image');
