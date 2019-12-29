@@ -24,7 +24,7 @@ Der größte Datenbehälter ist das `Project`; es hat zumindest einen Titel und 
 
 ## `Contributors`
 
-Benutzerinnen und Benutzer, hier `Contributors` genannt, existieren projektübergreifend. Jedem `Contributor` kann eine Rolle zugewiesen werden; die einzige notwendige Rolle ist jene der *Session-Leitung*: Sie konfiguriert, startet und beendet `Sessions`. Die *Session-Leitung* hat außerdem erweiterte Berechtigungen.
+Benutzerinnen und Benutzer, hier `Contributors` genannt, existieren projektübergreifend. Jedem `Contributor` kann sowohl pro Projekt als auch pro Session eine Rolle zugewiesen werden; die einzige notwendige Rolle ist jene der *Session-Leitung*: Sie konfiguriert, startet und beendet `Sessions`. Die *Session-Leitung* hat außerdem erweiterte Berechtigungen.
 
 
 ## `Sessions`

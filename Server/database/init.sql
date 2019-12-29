@@ -284,6 +284,15 @@ CREATE TABLE permission_per_session_role (
 );
 
 
+CREATE TABLE permission_per_project_role (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	role_id INT NOT NULL,
+		FOREIGN KEY(role_id) REFERENCES project_roles(id),
+	permission BIT(2) NOT NULL
+);
+
+
+
 
 -- INSERTS ------------------------------------------------------------------
 
