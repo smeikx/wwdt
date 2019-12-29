@@ -25,6 +25,13 @@ CREATE TABLE sessions (
 	default_permission BIT(2) DEFAULT b'10'
 );
 
+/* PERMISSIONS
+are of type BIT(2)
+------------------
+00 → invisible
+01 → visible
+10 → editable */
+
 
 CREATE TABLE session_timestamps (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -238,14 +245,6 @@ CREATE TABLE connections_per_arrangement (
 );
 
 
-
-/* PERMISSIONS
-	are of type BIT(2)
-	------------------
-	00 → invisible
-	01 → visible
-	10 → editable
-*/
 
 CREATE TABLE permission_per_upload (
 	id INT AUTO_INCREMENT PRIMARY KEY,
