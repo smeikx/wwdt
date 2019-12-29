@@ -1,8 +1,8 @@
 # Datenbank
 
-- [ ] passe Datenbank-Dump an die Spezifikation an
+- [x] passe Datenbank-Dump an die Spezifikation an
 	- [x] Rollen
-	- [ ] Zugriffsberechtigungen
+	- [x] Zugriffsberechtigungen
 	- [x] Arrangements
 
 - [ ] erstelle GraphQL-Schema

@@ -19,9 +19,10 @@ CREATE TABLE projects (
 
 CREATE TABLE sessions (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	title VARCHAR(127) NOT NULL,
 	project_id INT NOT NULL,
-		FOREIGN KEY(project_id) REFERENCES projects(id)
+		FOREIGN KEY(project_id) REFERENCES projects(id),
+	title VARCHAR(127) NOT NULL,
+	default_permission BIT(2) DEFAULT b'10'
 );
 
 
