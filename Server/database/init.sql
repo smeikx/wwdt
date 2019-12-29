@@ -204,7 +204,10 @@ CREATE TABLE arrangements (
 	session_id INT NOT NULL,
 		FOREIGN KEY(session_id) REFERENCES sessions(id),
 	contributor_id INT NOT NULL,
-		FOREIGN KEY(contributor_id) REFERENCES contributors(id)
+		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
+	title VARCHAR(127) NOT NULL,
+	description VARCHAR(511),
+	creation_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 
