@@ -1,0 +1,48 @@
+scalar Date
+
+type Project {
+	id: ID!
+	title: String!
+	creationTime: Date!
+	description: String
+	sessions: [Session]!
+}
+
+type Session {
+	id: ID!
+	title: String!
+	description: String
+	contributors: [Contributor]!
+	markers: [Marker]!
+	recordings: [Recording]!
+	arrangements: [Arrangement]!
+}
+
+type Arrangement {
+	title: String!
+	description: String
+	creator: Contributor!
+	contributors: [Contributor]
+}
+
+type Recording {
+#	start
+#	pause
+#	stop
+#	streams
+}
+
+Stream {
+	type
+	url
+}
+
+type Contributor {
+	id: ID!
+	email: String!
+	forename: String!
+	surname: String
+	projectRole: Role
+	sessionRole: Role
+}
+
