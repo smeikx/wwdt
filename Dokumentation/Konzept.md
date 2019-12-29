@@ -5,9 +5,9 @@
 
 In seiner Erstform wird **Der Tisch** primär im Unterricht an Gestaltungshochschulen genutzt. Allerdings wird beim Entwurf auch die Nutzung in anderem Kontext berücksichtigt.
 
-Obwohl **Der Tisch** einen Platz im Gestaltungsprozess einnimmt, hält er sich im direkten Austausch zwischen Gestalterinnen und Gestaltern im Hintergrund – er versucht nicht, vertraute Werkzeuge zu ersetzen. 
+Obwohl **Der Tisch** einen Platz im Gestaltungsprozess einnimmt, hält er sich im direkten Austausch zwischen Gestalterinnen und Gestaltern im Hintergrund – er versucht nicht, vertraute Werkzeuge zu ersetzen.
 
-Ein erklärtes Ziel besteht darin, während Diskussionen aufgekommene Informationen schnell wiederfinden zu können. 
+Ein erklärtes Ziel besteht darin, während Diskussionen aufgekommene Informationen schnell wiederfinden zu können.
 
 
 
@@ -29,12 +29,14 @@ Benutzerinnen und Benutzer, hier `Contributors` genannt, existieren projektüber
 
 ## `Sessions`
 
-Eine `Session` umfasst sämtliche Daten, die während und nach einer Diskussion entstehen – inkl. den Beziehungen die zwischen diesen Daten hergestellt werden. Dazu zählen:
+Eine `Session` umfasst sämtliche Daten, die während und nach einer Diskussion entstehen – inkl. den Beziehungen, die zwischen diesen Daten hergestellt werden. Dazu zählen:
 
 - Video- und Ton-Aufzeichnungen
 - `Marks` (zeitgebundene Datenbehälter)
 - beliebige Uploads
 - `Arrangements` (hergestellte Beziehungen zwischen Daten)
+
+Eine `Session` wird nie explizit beendet, sie kann jederzeit weiter fortgeführt werden.
 
 ### `Marks`
 
@@ -46,7 +48,7 @@ Jeder *Upload* wird automatisch an einen `Mark` gebunden, ein *Upload* kann aber
 
 In einem `Arrangement` werden bestehende `Marks` referenziert und (von Zeit ungebunden) zweidimensional angeordnet. Zweck eines `Arrangements` ist es, Beziehungen zwischen `Marks` auszudrücken – primär durch verschiedene Distanzen zueinander.
 
-Neben `Marks` können auch *Labels* und *Verbindungen* erstellt und platziert werden. *Labels* bestehen aus einem *Titel* und einer optionalen *Beschreibung*, *Verbindungen* beschreiben lediglich zwei Positionen.
+Zusätzlich zu `Marks` können auch *Labels* und *Verbindungen* erstellt und platziert werden. *Labels* bestehen aus einem *Titel* und einer optionalen *Beschreibung*, *Verbindungen* beschreiben lediglich zwei zusammengehörige Positionen.
 
 Die Platzierung von Daten ist an ein Raster gebunden: pro Zelle ein `Mark` oder *Label*. Das Raster kann theoretisch unbeschränkt erweitert werden.
 
@@ -55,7 +57,7 @@ Die Platzierung von Daten ist an ein Raster gebunden: pro Zelle ein `Mark` oder 
 
 `Contributors` haben die Kontrolle über Sichtbarkeit und Bearbeitbarkeit ihrer Beiträge (`Marks` und `Arrangements`): Sie können wählen, wer welchen Beitrag sehen und wer ihn auch bearbeiten darf.
 
-Möglicherweise gibt es Rollen, deren Träger sich über die individuell festgelegten Berechtigungen hinwegsetzen können. 
+Möglicherweise gibt es Rollen, deren Träger sich über die individuell festgelegten Berechtigungen hinwegsetzen können.
 Die *Session-Leitung* kann zudem die Default-Berechtigung von neu erstellten Beiträgen festlegen.
 
 
@@ -63,11 +65,11 @@ Die *Session-Leitung* kann zudem die Default-Berechtigung von neu erstellten Bei
 # Ablauf
 
 
-Um die Entwicklung des Systems zu erleichtern, wird die vorgesehene Nutzung des Systems in Phasen unterteilt. Diese Phasen wurden primär zur internen Kommunikation definiert, sie müssen sich nicht unmittelbar im GUI widerspiegeln. 
+Um die Entwicklung des Systems zu erleichtern, wird die vorgesehene Nutzung des Systems in Phasen unterteilt. Diese Phasen wurden primär zur internen Kommunikation definiert, sie müssen sich nicht unmittelbar im GUI widerspiegeln.
 
 Die untenstehende Liste zeigt, welche Tätigkeiten in welcher Phase hauptsächlich stattfinden; allerdings ist nahezu jede Aktion zu jedem Zeitpunkt möglich.
 
-Da die Phase *(4) Reflexion* praktisch einen Bestandteil der Phase *(5) Interpretation* darstellt, können die beiden Phasen vermutlich oft als eine betrachtet werden.
+Da die Phase *(4.) Reflexion* praktisch einen Bestandteil der Phase *(5.) Interpretation* darstellt, können die beiden Phasen vermutlich oft als eine betrachtet werden.
 
 1. Vorbereitung
 	- Anlegen von Projekt
@@ -88,5 +90,5 @@ Da die Phase *(4) Reflexion* praktisch einen Bestandteil der Phase *(5) Interpre
 6. Archivierung
 	- Export autonomen Pakets
 
-Eine Session wird nie explizit beendet, sie kann jederzeit weiter fortgeführt werden. 
+Wie weiter oben bereits erwähnt, wird eine Session nie explizit beendet, sie kann jederzeit weiter fortgeführt werden.
 
