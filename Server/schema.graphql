@@ -18,11 +18,34 @@ type Session {
 	arrangements: [Arrangement]!
 }
 
+type ArrangementCoordinate {
+	x: Int!
+	y: Int!
+}
+
+type ArrangedMark {
+	mark: Mark!
+	position ArrangementCoordinate!
+}
+
+type ArrangementConnection {
+	from: ArrangementCoordinate!
+	to: ArrangementCoordinate!
+}
+
+type ArrangementLabel {
+	title: String!
+	description: String
+}
+
 type Arrangement {
 	title: String!
 	description: String
 	creator: Contributor!
 	contributors: [Contributor]
+	marks: [ArrangedMark]!
+	connections: [ArrangementConnection]!
+	labels: [ArrangementLabel]!
 }
 
 type Recording {
@@ -44,5 +67,16 @@ type Contributor {
 	surname: String
 	projectRole: Role
 	sessionRole: Role
+	uploads: [Upload]!
+	marks: [Mark]!
+	arrangements: [Arrangement]!
 }
 
+type Upload {
+	creator: Contributor!
+	uploadTime: Date!
+	uploadName: String!
+	displayName: String!
+	url: String!
+	mediaType: MediaType!
+}
