@@ -1,82 +1,250 @@
-scalar Date
+scalar Datetime
 
-type Project {
+
+type Project
+{
 	id: ID!
 	title: String!
-	creationTime: Date!
+	creationTime: Datetime!
 	description: String
-	sessions: [Session]!
+	sessions: [Session!]
 }
 
-type Session {
+input Project
+{
+	title: String!
+	description: String
+}
+
+
+# sequential parts of one session
+type Episode
+{
+	start: Datetime!
+	end: Datetime!
+}
+
+type Session
+{
 	id: ID!
 	title: String!
 	description: String
-	contributors: [Contributor]!
-	markers: [Marker]!
-	recordings: [Recording]!
-	arrangements: [Arrangement]!
+	contributors: [Contributor!]
+	episodes: [Episode!]
+	markers: [Marker!]
+	recordings: [Recording!]
+	arrangements: [Arrangement!]
 }
 
-type ArrangementCoordinate {
+input Session
+{
+	title: String = null
+	description: String = null
+}
+
+type ArrangementCoordinate
+{
 	x: Int!
 	y: Int!
 }
 
-type ArrangedMark {
+input ArrangementCoordinate
+{
+	x: Int!
+	y: Int!
+}
+
+type ArrangedMark
+{
 	mark: Mark!
 	position ArrangementCoordinate!
 }
 
-type ArrangementConnection {
+type ArrangementConnection
+{
 	from: ArrangementCoordinate!
 	to: ArrangementCoordinate!
 }
 
-type ArrangementLabel {
+type ArrangementLabel
+{
 	title: String!
 	description: String
 }
 
-type Arrangement {
+type Arrangement
+{
 	title: String!
 	description: String
 	creator: Contributor!
 	contributors: [Contributor]
-	marks: [ArrangedMark]!
-	connections: [ArrangementConnection]!
-	labels: [ArrangementLabel]!
+	marks: [ArrangedMark!]
+	connections: [ArrangementConnection!]
+	labels: [ArrangementLabel!]
 }
 
-type Recording {
+type Recording
+{
 #	start
 #	pause
 #	stop
 #	streams
 }
 
-Stream {
+Stream
+{
 	type
 	url
 }
 
-type Contributor {
+type Contributor
+{
 	id: ID!
 	email: String!
 	forename: String!
 	surname: String
 	projectRole: Role
 	sessionRole: Role
-	uploads: [Upload]!
-	marks: [Mark]!
-	arrangements: [Arrangement]!
+	uploads: [Upload!]
+	marks: [Mark!]
+	arrangements: [Arrangement!]
+	sessions: [Session!]
 }
 
-type Upload {
+enum MediaType
+{
+	AUDIO
+	VIDEO
+	TEXT
+	UNKNOWN
+}
+
+type Upload
+{
 	creator: Contributor!
-	uploadTime: Date!
+	uploadTime: Datetime!
 	uploadName: String!
 	displayName: String!
 	url: String!
 	mediaType: MediaType!
 }
+
+type Mark
+{
+
+	title: String!
+	description: String
+	tags: [String!]
+	uploads: [Upload!]
+	frameCoordinates: [FrameCoordinate!]
+}
+
+# between 0 and 1; relative to the upper left corner
+type FrameCoordinate
+{
+	x: Float! 
+	y: Float!
+}
+
+
+type Query
+{
+	runningSession: String # URL
+	projects (): [Project!]
+	project (projectId: ID!): Project!
+	session (sessionId: ID!): Session!
+	mark (markId: ID!): Mark!
+	arrangement (arrangementId: ID!): Arrangement!
+	publicUploads (sessionId: ID!): [Upload!]
+	privateUploads (): [Upload!]
+}
+
+
+type Mutation
+{
+# PROJECT ##########################
+	createProject (
+		title: String = "",
+		description: String = "",
+	): Project!
+
+# SESSION ##########################
+	createSession (
+			title: String = "",
+			description: String = "",
+			contributors: [ID!],
+		): Session!
+
+	runSession (
+		id: ID!
+	): Boolean!
+
+	haltSession (
+		id: ID!
+	): Boolean!
+
+# CONTRIBUTORS ##########################
+	addContributors (
+		sessionId: ID!,
+		contributorIds: [ID!]
+	): ID!
+
+	createContributor (
+		email: String!,
+		forename: String!,
+		surname: String,
+		projectRole: ProjectRole,
+		sessionRole: Sessionrole
+	): Contributor!
+
+	assignProjectRole (
+		contributorId: ID!,
+		roleId: ID!
+	): Boolean!
+
+	assignSessionRole (
+		contributorId: ID!,
+		roleId: ID!
+	): Boolean!
+
+# MARK ##########################
+	createMark (
+		title: String = null,
+		description: String = null,
+		tags: [String!] = null,
+		uploads: [ID!] = null,
+		frameCoordinate: FrameCoordinate = null
+	): Mark!
+
+# ARRANGEMENTS ##########################
+	createArrangement (
+		session: ID!,
+		title: String = "",
+		description: String = "",
+	): Arrangement!
+
+	arrangeMark (
+		arrangementId: ID!,
+		markId: ID!,
+		coordinate: ArrangementCoordinate!
+	): Boolean!
+
+	arrangeLabel (
+		arrangementId: ID!,
+		title: String!,
+		description: String!,
+		coordinate: ArrangementCoordinate!
+	): Boolean!
+
+	arrangeConnection (
+		arrangementId: ID!,
+		fromCoordinate: ArrangementCoordinate!,
+		toCoordinate: ArrangementCoordinate!
+	): Boolean!
+
+# RECORDING ##########################
+	startRecording (): Boolean!
+
+	stopRecording (): Boolean!
+}
+
