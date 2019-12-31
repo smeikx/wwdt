@@ -176,7 +176,7 @@ CREATE TABLE tags_per_mark (
 
 
 -- deliberately allows multiple positions per timestamped mark
--- coordinates range between 0 and 1, describing the position relative from the upper left corner of a frame
+-- coordinates range between 0 and 1, describing the position relative to the upper left corner of a frame
 CREATE TABLE frame_positions_per_timestamped_mark (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	timestamped_mark_id INT NOT NULL,
