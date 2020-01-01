@@ -50,13 +50,12 @@ CREATE TABLE media_types (
 
 
 
--- automatic recordings, mostly audio & video (but expandable)
+-- (semi) automatic recordings (audio & video)
 CREATE TABLE recordings (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	session_id INT NOT NULL,
 		FOREIGN KEY(session_id) REFERENCES sessions(id),
-	media_type_id TINYINT UNSIGNED,
-		FOREIGN KEY(media_type_id) REFERENCES media_types(id),
+	media_type ENUM('audio', 'video') NOT NULL,
 	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	file_path VARCHAR(255) NOT NULL UNIQUE
 );
