@@ -1,4 +1,10 @@
-scalar Datetime
+scalar Datetime # milliseconds since 1970-01-01, 00:00:00 UTC
+scalar URL # String
+scalar ProjectRole # String
+scalar SessionRole # String
+
+union Role = ProjectRole | SessionRole
+union Contribution = Upload | Mark | Arrangement
 
 
 type Project
@@ -8,6 +14,7 @@ type Project
 	creationTime: Datetime!
 	description: String
 	sessions: [Session!]
+	contributors: [Contributor!]
 }
 
 input Project
@@ -22,6 +29,8 @@ type Episode
 {
 	start: Datetime!
 	end: Datetime!
+	marks: [Mark!]
+	uploads: [Upload!]
 }
 
 type Session
@@ -29,18 +38,25 @@ type Session
 	id: ID!
 	title: String!
 	description: String
+	start: Datetime!
+	end: Datetime!
 	contributors: [Contributor!]
 	episodes: [Episode!]
 	markers: [Marker!]
+	uploads: [Upload!]
 	recordings: [Recording!]
 	arrangements: [Arrangement!]
 }
 
-input Session
+
+type Recording
 {
-	title: String = null
-	description: String = null
+	id: ID!
+	url: URL!
+	creationTime: Datetime!
+	duration: Int!
 }
+
 
 type ArrangementCoordinate
 {
@@ -54,22 +70,27 @@ input ArrangementCoordinate
 	y: Int!
 }
 
+
 type ArrangedMark
 {
 	mark: Mark!
 	position ArrangementCoordinate!
+	creator: Contributor!
 }
 
-type ArrangementConnection
+type ArrangedConnection
 {
 	from: ArrangementCoordinate!
 	to: ArrangementCoordinate!
+	creator: Contributor!
 }
 
-type ArrangementLabel
+type ArrangedLabel
 {
 	title: String!
 	description: String
+	position: ArrangementCoordinate!
+	creator: Contributor!
 }
 
 type Arrangement
@@ -79,23 +100,10 @@ type Arrangement
 	creator: Contributor!
 	contributors: [Contributor]
 	marks: [ArrangedMark!]
-	connections: [ArrangementConnection!]
-	labels: [ArrangementLabel!]
+	connections: [ArrangedConnection!]
+	labels: [ArrangedLabel!]
 }
 
-type Recording
-{
-#	start
-#	pause
-#	stop
-#	streams
-}
-
-Stream
-{
-	type
-	url
-}
 
 type Contributor
 {
@@ -121,22 +129,26 @@ enum MediaType
 
 type Upload
 {
+	id: ID!
 	creator: Contributor!
 	uploadTime: Datetime!
 	uploadName: String!
 	displayName: String!
-	url: String!
+	url: URL!
 	mediaType: MediaType!
+	contributors: [Contributor!]
 }
 
 type Mark
 {
-
+	id: ID!
 	title: String!
 	description: String
 	tags: [String!]
 	uploads: [Upload!]
 	frameCoordinates: [FrameCoordinate!]
+	creator: Contributor!
+	contributors: [Contributor!]
 }
 
 # between 0 and 1; relative to the upper left corner
@@ -147,9 +159,18 @@ type FrameCoordinate
 }
 
 
+type Recorder
+{
+	id: ID!
+	name: String!
+	description: String
+}
+
+
 type Query
 {
-	runningSession: String # URL
+	runningSession: URL
+	recorders: [Recorder!]
 	projects (): [Project!]
 	project (projectId: ID!): Project!
 	session (sessionId: ID!): Session!
@@ -219,8 +240,9 @@ type Mutation
 # ARRANGEMENTS ##########################
 	createArrangement (
 		session: ID!,
-		title: String = "",
-		description: String = "",
+		title: String = null
+		description: String = null
+		contributors: [Contributor!]
 	): Arrangement!
 
 	arrangeMark (
@@ -243,8 +265,23 @@ type Mutation
 	): Boolean!
 
 # RECORDING ##########################
-	startRecording (): Boolean!
+	startRecording (
+		devices: [ID!]!
+	): Boolean!
 
-	stopRecording (): Boolean!
+	stopRecording (
+		devices: [ID!]!
+	): Boolean!
+
+# PERMISSIONS ##########################
+	addPermission (
+		contributionId: ID!, # Upload, Mark, Arrangement
+		contributorId: ID!
+	): Boolean!
+
+	removePermission (
+		contributionId: ID!, # Upload, Mark, Arrangement
+		contributorId: ID!
+	): Boolean!
 }
 
