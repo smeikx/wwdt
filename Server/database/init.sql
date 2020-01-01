@@ -57,6 +57,7 @@ CREATE TABLE recordings (
 		FOREIGN KEY(session_id) REFERENCES sessions(id),
 	media_type ENUM('audio', 'video') NOT NULL,
 	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	duration INT UNSIGNED, -- in seconds
 	file_path VARCHAR(255) NOT NULL UNIQUE
 );
 
