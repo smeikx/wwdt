@@ -44,7 +44,7 @@ CREATE TABLE session_timestamps (
 
 -- known types of media files
 CREATE TABLE media_types (
-	id INT AUTO_INCREMENT PRIMARY KEY,
+	id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	media_type VARCHAR(63) NOT NULL UNIQUE
 );
 
@@ -55,7 +55,7 @@ CREATE TABLE recordings (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	session_id INT,
 		FOREIGN KEY(session_id) REFERENCES sessions(id),
-	media_type_id INT,
+	media_type_id TINYINT UNSIGNED,
 		FOREIGN KEY(media_type_id) REFERENCES media_types(id),
 	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	file_path VARCHAR(255) NOT NULL UNIQUE
@@ -75,14 +75,14 @@ CREATE TABLE contributors (
 
 
 CREATE TABLE project_roles (
-	id INT AUTO_INCREMENT PRIMARY KEY,
+	id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(127) UNIQUE NOT NULL,
 	description VARCHAR(127)
 );
 
 
 CREATE TABLE session_roles (
-	id INT AUTO_INCREMENT PRIMARY KEY,
+	id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(127) UNIQUE NOT NULL,
 	description VARCHAR(127)
 );
@@ -94,7 +94,7 @@ CREATE TABLE role_per_project (
 		FOREIGN KEY(project_id) REFERENCES projects(id),
 	contributor_id INT NOT NULL,
 		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
-	role_id INT NOT NULL,
+	role_id TINYINT UNSIGNED NOT NULL,
 		FOREIGN KEY(role_id) REFERENCES project_roles(id)
 );
 
@@ -105,7 +105,7 @@ CREATE TABLE role_per_session (
 		FOREIGN KEY(session_id) REFERENCES sessions(id),
 	contributor_id INT NOT NULL,
 		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
-	role_id INT NOT NULL,
+	role_id TINYINT UNSIGNED NOT NULL,
 		FOREIGN KEY(role_id) REFERENCES session_roles(id)
 );
 
@@ -133,7 +133,7 @@ CREATE TABLE uploads (
 	upload_name VARCHAR(255) NOT NULL,
 	display_name VARCHAR(255) NOT NULL,
 	file_path VARCHAR(511) UNIQUE NOT NULL,
-	media_type INT,
+	media_type TINYINT UNSIGNED,
 		FOREIGN KEY(media_type) REFERENCES media_types(id)
 );
 
@@ -281,7 +281,7 @@ CREATE TABLE permission_per_arrangement (
 
 CREATE TABLE permission_per_session_role (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	role_id INT NOT NULL,
+	role_id TINYINT UNSIGNED NOT NULL,
 		FOREIGN KEY(role_id) REFERENCES session_roles(id),
 	permission BIT(2) NOT NULL
 );
@@ -289,7 +289,7 @@ CREATE TABLE permission_per_session_role (
 
 CREATE TABLE permission_per_project_role (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	role_id INT NOT NULL,
+	role_id TINYINT UNSIGNED NOT NULL,
 		FOREIGN KEY(role_id) REFERENCES project_roles(id),
 	permission BIT(2) NOT NULL
 );
