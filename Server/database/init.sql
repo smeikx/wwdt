@@ -53,7 +53,7 @@ CREATE TABLE media_types (
 -- automatic recordings, mostly audio & video (but expandable)
 CREATE TABLE recordings (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	session_id INT,
+	session_id INT NOT NULL,
 		FOREIGN KEY(session_id) REFERENCES sessions(id),
 	media_type_id TINYINT UNSIGNED,
 		FOREIGN KEY(media_type_id) REFERENCES media_types(id),
@@ -162,7 +162,7 @@ CREATE TABLE timestamps_per_mark (
 -- tags for associating marks with each other
 CREATE TABLE tags (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	title VARCHAR(63) UNIQUE
+	title VARCHAR(63) UNIQUE NOT NULL
 );
 
 
