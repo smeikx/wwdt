@@ -62,6 +62,14 @@ CREATE TABLE recordings (
 );
 
 
+CREATE TABLE transcripts (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	record_id INT NOT NULL,
+		FOREIGN KEY(record_id) REFERENCES records(id),
+	file_path VARCHAR(255) NOT NULL UNIQUE
+);
+
+
 
 -- list of all contributors
 -- XXX: password not yet in use!
