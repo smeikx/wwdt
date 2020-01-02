@@ -10,7 +10,7 @@ USE tisch;
 
 CREATE TABLE projects (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	title VARCHAR(127) NOT NULL,
+	title VARCHAR(127) NOT NULL UNIQUE,
 	creation_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	description VARCHAR(2047)
 );
@@ -124,7 +124,10 @@ CREATE TABLE contributors_per_session (
 	fk_session_id INT NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
 	fk_contributor_id INT NOT NULL,
-		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id)
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
+
+	CONSTRAINT unique_contributor_per_session
+		UNIQUE (fk_session_id, fk_contributor_id)
 );
 
 
@@ -168,10 +171,17 @@ CREATE TABLE timestamps_per_mark (
 
 
 -- tags for associating marks with each other
+-- each tag exists only once per session
 CREATE TABLE tags (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	title VARCHAR(63) UNIQUE NOT NULL
+	fk_session_id INT NOT NULL,
+		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
+	title VARCHAR(63) NOT NULL,
+
+	CONSTRAINT unique_tag_per_session
+		UNIQUE (fk_session_id, title)
 );
+
 
 
 CREATE TABLE tags_per_mark (
@@ -179,7 +189,10 @@ CREATE TABLE tags_per_mark (
 	fk_mark_id INT NOT NULL,
 		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
 	fk_tag_id INT NOT NULL,
-		FOREIGN KEY(fk_tag_id) REFERENCES tags(id)
+		FOREIGN KEY(fk_tag_id) REFERENCES tags(id),
+
+	CONSTRAINT unique_tag_per_mark
+		UNIQUE (fk_mark_id, fk_tag_id)
 );
 
 
@@ -192,7 +205,10 @@ CREATE TABLE frame_positions_per_timestamped_mark (
 	fk_recording_id INT NOT NULL,
 		FOREIGN KEY(fk_recording_id) REFERENCES recordings(id),
 	x FLOAT UNSIGNED NOT NULL,
-	y FLOAT UNSIGNED NOT NULL
+	y FLOAT UNSIGNED NOT NULL,
+
+	CONSTRAINT unique_recording_per_timestamped_mark
+		UNIQUE (fk_timestamped_mark_id, fk_recording_id)
 );
 
 
