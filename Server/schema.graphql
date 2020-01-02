@@ -46,6 +46,7 @@ type Session
 	uploads: [Upload!]
 	recordings: [Recording!]
 	arrangements: [Arrangement!]
+	tags: [String!]
 }
 
 
@@ -142,6 +143,7 @@ type Upload
 type Mark
 {
 	id: ID!
+	timestamp: Datetime!
 	title: String!
 	description: String
 	tags: [String!]
@@ -151,9 +153,22 @@ type Mark
 	contributors: [Contributor!]
 }
 
+input Mark
+{
+	title: String
+	timestamp: Datetime
+	description: String
+	tags: [String!]
+	uploads: [ID!]
+	frameCoordinate: FrameCoordinate
+	contributors: [Contributor!]
+}
+
+
 # between 0 and 1; relative to the upper left corner
 type FrameCoordinate
 {
+	recordingId: ID!
 	x: Float! 
 	y: Float!
 }
@@ -183,28 +198,35 @@ type Query
 
 type Mutation
 {
+
+
 # PROJECT ##########################
+
 	createProject (
-		title: String = "",
-		description: String = "",
+		title: String = null,
+		description: String = null,
 	): Project!
 
+
 # SESSION ##########################
+
 	createSession (
-			title: String = "",
-			description: String = "",
+			title: String = null,
+			description: String = null,
 			contributors: [ID!],
 		): Session!
 
 	runSession (
 		id: ID!
-	): Boolean!
+	): Boolean
 
 	haltSession (
 		id: ID!
 	): Boolean!
 
+
 # CONTRIBUTORS ##########################
+
 	addContributors (
 		sessionId: ID!,
 		contributorIds: [ID!]
@@ -228,43 +250,77 @@ type Mutation
 		roleId: ID!
 	): Boolean!
 
+
 # MARK ##########################
+
 	createMark (
-		title: String = null,
-		description: String = null,
-		tags: [String!] = null,
-		uploads: [ID!] = null,
-		frameCoordinate: FrameCoordinate = null
+		mark: Mark!
 	): Mark!
 
+	# null properties won’t change
+	# for deletion use empty strings/arrays
+	updateMark (
+		markId: ID!,
+		mark: Mark!
+	): ID # null on error
+
+
 # ARRANGEMENTS ##########################
+
 	createArrangement (
 		session: ID!,
 		title: String = null
 		description: String = null
 		contributors: [Contributor!]
+	): ID!
+
+	updateArrangement (
+		arrangementId: ID!,
+		title: String = null,
+		description: String = null,
+		contributors: [Contributor!] = null
 	): Arrangement!
 
-	arrangeMark (
+	createArrangedMark (
 		arrangementId: ID!,
-		markId: ID!,
+		markId: ID = null,
+		coordinate: ArrangementCoordinate!
+	): ID!
+
+	updateArrangedMark (
+		arrangedMarkId: ID!,
+		coordinate: ArrangementCoordinate = null
+	): ArrangedMark!
+
+	createArrangedLabel (
+		arrangementId: ID!,
+		title: String = null,
+		description: String = null,
 		coordinate: ArrangementCoordinate!
 	): Boolean!
 
-	arrangeLabel (
-		arrangementId: ID!,
-		title: String!,
-		description: String!,
-		coordinate: ArrangementCoordinate!
+	updateArrangedLabel (
+		arrangedLabelId: ID!,
+		title: String = null,
+		description: String = null,
+		coordinate: ArrangementCoordinate = null
 	): Boolean!
 
-	arrangeConnection (
+	createArrangedConnection (
 		arrangementId: ID!,
 		fromCoordinate: ArrangementCoordinate!,
 		toCoordinate: ArrangementCoordinate!
 	): Boolean!
 
+	updateArrangedConnection (
+		arrangedConnectionId: ID!,
+		fromCoordinate: ArrangementCoordinate = null,
+		toCoordinate: ArrangementCoordinate = null
+	): Boolean!
+
+
 # RECORDING ##########################
+
 	startRecording (
 		devices: [ID!]!
 	): Boolean!
@@ -273,7 +329,9 @@ type Mutation
 		devices: [ID!]!
 	): Boolean!
 
+
 # PERMISSIONS ##########################
+
 	addPermission (
 		contributionId: ID!, # Upload, Mark, Arrangement
 		contributorId: ID!
