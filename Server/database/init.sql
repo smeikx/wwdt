@@ -19,8 +19,8 @@ CREATE TABLE projects (
 
 CREATE TABLE sessions (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	project_id INT NOT NULL,
-		FOREIGN KEY(project_id) REFERENCES projects(id),
+	fk_project_id INT NOT NULL,
+		FOREIGN KEY(fk_project_id) REFERENCES projects(id),
 	title VARCHAR(127) NOT NULL,
 	default_permission BIT(2) DEFAULT b'10'
 );
@@ -35,8 +35,8 @@ are of type BIT(2)
 
 CREATE TABLE session_timestamps (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	session_id INT NOT NULL,
-		FOREIGN KEY(session_id) REFERENCES sessions(id),
+	fk_session_id INT NOT NULL,
+		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
 	start_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	end_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -53,8 +53,8 @@ CREATE TABLE media_types (
 -- (semi) automatic recordings (audio & video)
 CREATE TABLE recordings (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	session_id INT NOT NULL,
-		FOREIGN KEY(session_id) REFERENCES sessions(id),
+	fk_session_id INT NOT NULL,
+		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
 	media_type ENUM('audio', 'video') NOT NULL,
 	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	duration INT UNSIGNED, -- in seconds
@@ -64,8 +64,8 @@ CREATE TABLE recordings (
 
 CREATE TABLE transcripts (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	record_id INT NOT NULL,
-		FOREIGN KEY(record_id) REFERENCES recordings(id),
+	fk_record_id INT NOT NULL,
+		FOREIGN KEY(fk_record_id) REFERENCES recordings(id),
 	file_path VARCHAR(255) NOT NULL UNIQUE
 );
 
@@ -98,33 +98,33 @@ CREATE TABLE session_roles (
 
 CREATE TABLE role_per_project (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	project_id INT NOT NULL,
-		FOREIGN KEY(project_id) REFERENCES projects(id),
-	contributor_id INT NOT NULL,
-		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
-	role_id TINYINT UNSIGNED NOT NULL,
-		FOREIGN KEY(role_id) REFERENCES project_roles(id)
+	fk_project_id INT NOT NULL,
+		FOREIGN KEY(fk_project_id) REFERENCES projects(id),
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
+	fk_role_id TINYINT UNSIGNED NOT NULL,
+		FOREIGN KEY(fk_role_id) REFERENCES project_roles(id)
 );
 
 
 CREATE TABLE role_per_session (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	session_id INT NOT NULL,
-		FOREIGN KEY(session_id) REFERENCES sessions(id),
-	contributor_id INT NOT NULL,
-		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
-	role_id TINYINT UNSIGNED NOT NULL,
-		FOREIGN KEY(role_id) REFERENCES session_roles(id)
+	fk_session_id INT NOT NULL,
+		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
+	fk_role_id TINYINT UNSIGNED NOT NULL,
+		FOREIGN KEY(fk_role_id) REFERENCES session_roles(id)
 );
 
 
 -- allows to track who participated in a session without them directly uploading anything
 CREATE TABLE contributors_per_session (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	session_id INT NOT NULL,
-		FOREIGN KEY(session_id) REFERENCES sessions(id),
-	contributor_id INT NOT NULL,
-		FOREIGN KEY(contributor_id) REFERENCES contributors(id)
+	fk_session_id INT NOT NULL,
+		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id)
 );
 
 
@@ -133,10 +133,10 @@ CREATE TABLE contributors_per_session (
 -- …/project_title-id/session_title-id/contributor_name-id/upload_id.foo
 CREATE TABLE uploads (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	session_id INT NOT NULL,
-		FOREIGN KEY(session_id) REFERENCES sessions(id),
-	contributor_id INT NOT NULL,
-		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
+	fk_session_id INT NOT NULL,
+		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	upload_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	upload_name VARCHAR(255) NOT NULL,
 	display_name VARCHAR(255) NOT NULL,
@@ -149,10 +149,10 @@ CREATE TABLE uploads (
 -- marks are time-bound, user-generated pieces of information
 CREATE TABLE marks (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	session_id INT NOT NULL,
-		FOREIGN KEY(session_id) REFERENCES sessions(id),
-	contributor_id INT NOT NULL,
-		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
+	fk_session_id INT NOT NULL,
+		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	title VARCHAR(127) NOT NULL,
 	description TEXT
@@ -161,8 +161,8 @@ CREATE TABLE marks (
 
 CREATE TABLE timestamps_per_mark (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	mark_id INT NOT NULL UNIQUE, -- not PRIMARY to potentially allow multiple timestamps per mark
-		FOREIGN KEY(mark_id) REFERENCES marks(id),
+	fk_mark_id INT NOT NULL UNIQUE, -- not PRIMARY to potentially allow multiple timestamps per mark
+		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
 	`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -176,10 +176,10 @@ CREATE TABLE tags (
 
 CREATE TABLE tags_per_mark (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	mark_id INT NOT NULL,
-		FOREIGN KEY(mark_id) REFERENCES marks(id),
-	tag_id INT NOT NULL,
-		FOREIGN KEY(tag_id) REFERENCES tags(id)
+	fk_mark_id INT NOT NULL,
+		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
+	fk_tag_id INT NOT NULL,
+		FOREIGN KEY(fk_tag_id) REFERENCES tags(id)
 );
 
 
@@ -187,10 +187,10 @@ CREATE TABLE tags_per_mark (
 -- coordinates range between 0 and 1, describing the position relative to the upper left corner of a frame
 CREATE TABLE frame_positions_per_timestamped_mark (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	timestamped_mark_id INT NOT NULL,
-		FOREIGN KEY(timestamped_mark_id) REFERENCES timestamps_per_mark(id),
-	recording_id INT NOT NULL,
-		FOREIGN KEY(recording_id) REFERENCES recordings(id),
+	fk_timestamped_mark_id INT NOT NULL,
+		FOREIGN KEY(fk_timestamped_mark_id) REFERENCES timestamps_per_mark(id),
+	fk_recording_id INT NOT NULL,
+		FOREIGN KEY(fk_recording_id) REFERENCES recordings(id),
 	x FLOAT UNSIGNED NOT NULL,
 	y FLOAT UNSIGNED NOT NULL
 );
@@ -199,20 +199,20 @@ CREATE TABLE frame_positions_per_timestamped_mark (
 -- files are always bound to a mark
 CREATE TABLE uploads_per_mark (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	mark_id INT NOT NULL,
-		FOREIGN KEY(mark_id) REFERENCES marks(id),
-	upload_id INT NOT NULL,
-		FOREIGN KEY(upload_id) REFERENCES uploads(id)
+	fk_mark_id INT NOT NULL,
+		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
+	fk_upload_id INT NOT NULL,
+		FOREIGN KEY(fk_upload_id) REFERENCES uploads(id)
 );
 
 
 
 CREATE TABLE arrangements (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	session_id INT NOT NULL,
-		FOREIGN KEY(session_id) REFERENCES sessions(id),
-	contributor_id INT NOT NULL,
-		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
+	fk_session_id INT NOT NULL,
+		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	title VARCHAR(127) NOT NULL,
 	description VARCHAR(511),
 	creation_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -225,12 +225,12 @@ CREATE TABLE arrangements (
 
 CREATE TABLE marks_per_arrangement (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	arrangement_id INT NOT NULL,
-		FOREIGN KEY(arrangement_id) REFERENCES arrangements(id),
-	contributor_id INT NOT NULL,
-		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
-	mark_id INT NOT NULL,
-		FOREIGN KEY(mark_id) REFERENCES marks(id),
+	fk_arrangement_id INT NOT NULL,
+		FOREIGN KEY(fk_arrangement_id) REFERENCES arrangements(id),
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
+	fk_mark_id INT NOT NULL,
+		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
 	x INT NOT NULL,
 	y INT NOT NULL
 );
@@ -238,10 +238,10 @@ CREATE TABLE marks_per_arrangement (
 
 CREATE TABLE labels_per_arrangement (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	arrangement_id INT NOT NULL,
-		FOREIGN KEY(arrangement_id) REFERENCES arrangements(id),
-	contributor_id INT NOT NULL,
-		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
+	fk_arrangement_id INT NOT NULL,
+		FOREIGN KEY(fk_arrangement_id) REFERENCES arrangements(id),
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	title VARCHAR(127) NOT NULL,
 	description VARCHAR(511),
 	x INT NOT NULL,
@@ -251,10 +251,10 @@ CREATE TABLE labels_per_arrangement (
 
 CREATE TABLE connections_per_arrangement (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	arrangement_id INT NOT NULL,
-		FOREIGN KEY(arrangement_id) REFERENCES arrangements(id),
-	contributor_id INT NOT NULL,
-		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
+	fk_arrangement_id INT NOT NULL,
+		FOREIGN KEY(fk_arrangement_id) REFERENCES arrangements(id),
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	from_x INT NOT NULL,
 	from_y INT NOT NULL,
 	to_x INT NOT NULL,
@@ -265,46 +265,46 @@ CREATE TABLE connections_per_arrangement (
 
 CREATE TABLE permission_per_upload (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	upload_id INT NOT NULL,
-		FOREIGN KEY(upload_id) REFERENCES uploads(id),
-	contributor_id INT NOT NULL,
-		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
+	fk_upload_id INT NOT NULL,
+		FOREIGN KEY(fk_upload_id) REFERENCES uploads(id),
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	permission BIT(2) NOT NULL
 );
 
 
 CREATE TABLE permission_per_mark (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	mark_id INT NOT NULL,
-		FOREIGN KEY(mark_id) REFERENCES marks(id),
-	contributor_id INT NOT NULL,
-		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
+	fk_mark_id INT NOT NULL,
+		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	permission BIT(2) NOT NULL
 );
 
 
 CREATE TABLE permission_per_arrangement (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	arrangement_id INT NOT NULL,
-		FOREIGN KEY(arrangement_id) REFERENCES arrangements(id),
-	contributor_id INT NOT NULL,
-		FOREIGN KEY(contributor_id) REFERENCES contributors(id),
+	fk_arrangement_id INT NOT NULL,
+		FOREIGN KEY(fk_arrangement_id) REFERENCES arrangements(id),
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	permission BIT(2) NOT NULL
 );
 
 
 CREATE TABLE permission_per_session_role (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	role_id TINYINT UNSIGNED NOT NULL,
-		FOREIGN KEY(role_id) REFERENCES session_roles(id),
+	fk_role_id TINYINT UNSIGNED NOT NULL,
+		FOREIGN KEY(fk_role_id) REFERENCES session_roles(id),
 	permission BIT(2) NOT NULL
 );
 
 
 CREATE TABLE permission_per_project_role (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	role_id TINYINT UNSIGNED NOT NULL,
-		FOREIGN KEY(role_id) REFERENCES project_roles(id),
+	fk_role_id TINYINT UNSIGNED NOT NULL,
+		FOREIGN KEY(fk_role_id) REFERENCES project_roles(id),
 	permission BIT(2) NOT NULL
 );
 
