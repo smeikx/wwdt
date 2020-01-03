@@ -25,6 +25,7 @@ input Project
 
 
 # sequential parts of one session
+# they are created when one session is paused and later resumed
 type Episode
 {
 	start: Datetime!
