@@ -280,7 +280,7 @@ type Mutation
 		arrangementId: ID!,
 		title: String = null,
 		description: String = null,
-		contributors: [Contributor!] = null
+		contributors: [ID!] = null
 	): Arrangement!
 
 	createArrangedMark (
