@@ -42,7 +42,7 @@ type Session
 	end: Datetime!
 	contributors: [Contributor!]
 	episodes: [Episode!]
-	markers: [Marker!]
+	markers: [Mark!]
 	uploads: [Upload!]
 	recordings: [Recording!]
 	arrangements: [Arrangement!]
@@ -75,7 +75,7 @@ input ArrangementCoordinate
 type ArrangedMark
 {
 	mark: Mark!
-	position ArrangementCoordinate!
+	position: ArrangementCoordinate!
 	creator: Contributor!
 }
 
@@ -182,23 +182,24 @@ type Recorder
 }
 
 
+
 type Query
 {
 	runningSession: URL
 	recorders: [Recorder!]
-	projects (): [Project!]
+	projects: [Project!]
 	project (projectId: ID!): Project!
 	session (sessionId: ID!): Session!
 	mark (markId: ID!): Mark!
 	arrangement (arrangementId: ID!): Arrangement!
 	publicUploads (sessionId: ID!): [Upload!]
-	privateUploads (): [Upload!]
+	privateUploads: [Upload!]
 }
+
 
 
 type Mutation
 {
-
 
 # PROJECT ##########################
 
@@ -237,7 +238,7 @@ type Mutation
 		forename: String!,
 		surname: String,
 		projectRole: ProjectRole,
-		sessionRole: Sessionrole
+		sessionRole: SessionRole
 	): Contributor!
 
 	assignProjectRole (
