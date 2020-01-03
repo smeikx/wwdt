@@ -17,7 +17,7 @@ type Project
 	contributors: [Contributor!]
 }
 
-input Project
+input ProjectInput
 {
 	title: String!
 	description: String
@@ -66,7 +66,7 @@ type ArrangementCoordinate
 	y: Int!
 }
 
-input ArrangementCoordinate
+input ArrangementCoordinateInput
 {
 	x: Int!
 	y: Int!
@@ -154,7 +154,7 @@ type Mark
 	contributors: [Contributor!]
 }
 
-input Mark
+input MarkInput
 {
 	title: String
 	timestamp: Datetime
@@ -256,14 +256,14 @@ type Mutation
 # MARK ##########################
 
 	createMark (
-		mark: Mark!
+		mark: MarkInput!
 	): Mark!
 
 	# null properties won’t change
 	# for deletion use empty strings/arrays
 	updateMark (
 		markId: ID!,
-		mark: Mark!
+		mark: MarkInput!
 	): ID # null on error
 
 
@@ -286,38 +286,38 @@ type Mutation
 	createArrangedMark (
 		arrangementId: ID!,
 		markId: ID = null,
-		coordinate: ArrangementCoordinate!
+		coordinate: ArrangementCoordinateInput!
 	): ID!
 
 	updateArrangedMark (
 		arrangedMarkId: ID!,
-		coordinate: ArrangementCoordinate = null
+		coordinate: ArrangementCoordinateInput = null
 	): ArrangedMark!
 
 	createArrangedLabel (
 		arrangementId: ID!,
 		title: String = null,
 		description: String = null,
-		coordinate: ArrangementCoordinate!
+		coordinate: ArrangementCoordinateInput!
 	): Boolean!
 
 	updateArrangedLabel (
 		arrangedLabelId: ID!,
 		title: String = null,
 		description: String = null,
-		coordinate: ArrangementCoordinate = null
+		coordinate: ArrangementCoordinateInput = null
 	): Boolean!
 
 	createArrangedConnection (
 		arrangementId: ID!,
-		fromCoordinate: ArrangementCoordinate!,
-		toCoordinate: ArrangementCoordinate!
+		fromCoordinate: ArrangementCoordinateInput!,
+		toCoordinate: ArrangementCoordinateInput!
 	): Boolean!
 
 	updateArrangedConnection (
 		arrangedConnectionId: ID!,
-		fromCoordinate: ArrangementCoordinate = null,
-		toCoordinate: ArrangementCoordinate = null
+		fromCoordinate: ArrangementCoordinateInput = null,
+		toCoordinate: ArrangementCoordinateInput = null
 	): Boolean!
 
 
