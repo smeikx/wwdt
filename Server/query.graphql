@@ -1,23 +1,29 @@
 type Query
 {
 	projects: [Project!]
-	project (projectId: ID!): Project!
+
+	project (
+		projectId: ID!
+	): Project!
+
 
 	runningSession: URL
+
 	currentContributor: Contributor!
 
 	recorders: [Recorder!]
 
-	mark (markId: ID!): Mark!
+
+	marks (
+		permission: Permission = null
+	): [Mark!]
+
+	uploads (
+		permission: Permission = null
+	): [Upload!]
 
 	arrangements (
-		arrangementId: ID = null,
-		private: Boolean! = true,
-		visible: Boolean! = true,
-		editable: Boolean! = true
-	): Arrangement!
-
-	publicUploads (sessionId: ID!): [Upload!]
-	privateUploads: [Upload!]
+		permission: Permission = null
+	): [Arrangement!]
 }
 

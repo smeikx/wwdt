@@ -99,6 +99,7 @@ type Arrangement
 	connections: [ArrangedConnection!]
 	labels: [ArrangedLabel!]
 	editable: Boolean!
+	isOwn: Boolean!
 }
 
 
@@ -141,6 +142,7 @@ type Upload
 	mediaType: MediaType!
 	contributors: [Contributor!]
 	editable: Boolean!
+	isOwn: Boolean!
 }
 
 type Mark
@@ -155,6 +157,7 @@ type Mark
 	creator: Contributor!
 	contributors: [Contributor!]
 	editable: Boolean!
+	isOwn: Boolean!
 }
 
 input MarkInput
@@ -194,10 +197,9 @@ type Recorder
 }
 
 
-type ContributionList
+enum Permission
 {
-	own: [Contribution]!
-	editable: [Contribution]!
-	readable: [Contribution]!
+	READABLE # only readable, not editable
+	EDITABLE # editable exluding own
+	SELFMADE # created by current contributor
 }
-
