@@ -17,12 +17,6 @@ type Project
 	contributors: [Contributor!]
 }
 
-input ProjectInput
-{
-	title: String!
-	description: String
-}
-
 
 # sequential parts of one session
 # they are created when one session is paused and later resumed
@@ -104,6 +98,7 @@ type Arrangement
 	marks: [ArrangedMark!]
 	connections: [ArrangedConnection!]
 	labels: [ArrangedLabel!]
+	editable: Boolean!
 }
 
 
@@ -119,6 +114,12 @@ type Contributor
 	marks: [Mark!]
 	arrangements: [Arrangement!]
 	sessions: [Session!]
+}
+
+type Contributors
+{
+	readers: [Contributor!]
+	editors: [Contributor!]
 }
 
 enum MediaType
@@ -139,6 +140,7 @@ type Upload
 	url: URL!
 	mediaType: MediaType!
 	contributors: [Contributor!]
+	editable: Boolean!
 }
 
 type Mark
@@ -152,6 +154,7 @@ type Mark
 	frameCoordinates: [FrameCoordinate!]
 	creator: Contributor!
 	contributors: [Contributor!]
+	editable: Boolean!
 }
 
 input MarkInput
@@ -161,7 +164,7 @@ input MarkInput
 	description: String
 	tags: [String!]
 	uploads: [ID!]
-	frameCoordinate: FrameCoordinate
+	frameCoordinates: FrameCoordinateInput
 	contributors: [Contributor!]
 }
 
@@ -170,8 +173,15 @@ input MarkInput
 type FrameCoordinate
 {
 	recordingId: ID!
-	x: Float! 
+	x: Float!
 	y: Float!
+}
+
+input FrameCoordinateInput
+{
+	recordingId: ID
+	x: Float
+	y: Float
 }
 
 
@@ -180,19 +190,37 @@ type Recorder
 	id: ID!
 	name: String!
 	description: String
+	previewUrl: URL
 }
 
+
+type ContributionList
+{
+	own: [Contribution]!
+	editable: [Contribution]!
+	readable: [Contribution]!
+}
 
 
 type Query
 {
-	runningSession: URL
-	recorders: [Recorder!]
 	projects: [Project!]
 	project (projectId: ID!): Project!
-	session (sessionId: ID!): Session!
+
+	runningSession: URL
+	currentContributor: Contributor!
+
+	recorders: [Recorder!]
+
 	mark (markId: ID!): Mark!
-	arrangement (arrangementId: ID!): Arrangement!
+
+	arrangements (
+		arrangementId: ID = null,
+		private: Boolean! = true,
+		visible: Boolean! = true,
+		editable: Boolean! = true
+	): Arrangement!
+
 	publicUploads (sessionId: ID!): [Upload!]
 	privateUploads: [Upload!]
 }
