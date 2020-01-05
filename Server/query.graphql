@@ -14,15 +14,20 @@ type Query
 	recorders: [Recorder!]
 
 
+	# null → all visible contributions
+
 	marks (
+		includingSelfmade: Boolean = true
 		permission: Permission = null
 	): [Mark!]
 
 	uploads (
+		includingSelfmade: Boolean = true
 		permission: Permission = null
 	): [Upload!]
 
 	arrangements (
+		includingSelfmade: Boolean = true
 		permission: Permission = null
 	): [Arrangement!]
 }

@@ -1,10 +1,15 @@
 scalar Datetime # milliseconds since 1970-01-01, 00:00:00 UTC
 scalar URL # String
-scalar ProjectRole # String
-scalar SessionRole # String
 
-union Role = ProjectRole | SessionRole
 union Contribution = Upload | Mark | Arrangement
+
+
+type Role
+{
+	id: ID!
+	title: String!
+	description: String
+}
 
 
 type Project
@@ -42,6 +47,7 @@ type Session
 	recordings: [Recording!]
 	arrangements: [Arrangement!]
 	tags: [String!]
+	defaultPermission: Permission!
 }
 
 
@@ -201,5 +207,6 @@ enum Permission
 {
 	READABLE # only readable, not editable
 	EDITABLE # editable exluding own
-	SELFMADE # created by current contributor
+	NONE # invisible to others
 }
+

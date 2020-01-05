@@ -4,52 +4,96 @@ type Mutation
 # PROJECT ##########################
 
 	createProject (
-		title: String = null,
-		description: String = null,
+		title: String = null
+		description: String = null
+	): Project!
+
+	editProject (
+		projectId: ID!
+		title: String = null
+		description: String = null
 	): Project!
 
 
 # SESSION ##########################
 
 	createSession (
-			title: String = null,
-			description: String = null,
-			contributors: [ID!],
-		): Session!
+		title: String = null
+		description: String = null
+		contributors: [ID!]
+		defaultPermission: Permission = EDITABLE
+	): Session
 
+	editSession (
+		sessionId: ID = null
+		title: String = null
+		description: String = null
+		contributors: [ID!] = null
+		defaultPermission: Permission = null
+	): Boolean!
+
+	# also starts/pauses recording
 	runSession (
-		id: ID!
-	): Boolean
+		id: ID = null
+	): Boolean!
 
 	haltSession (
-		id: ID!
+		id: ID = null
 	): Boolean!
 
 
 # CONTRIBUTORS ##########################
 
 	addContributors (
-		sessionId: ID!,
+		sessionId: ID = null
 		contributorIds: [ID!]
-	): ID!
+	): Boolean!
 
 	createContributor (
-		email: String!,
-		forename: String!,
-		surname: String,
-		projectRole: ProjectRole,
-		sessionRole: SessionRole
-	): Contributor!
+		email: String!
+		forename: String!
+		surname: String
+		projectRole: Role
+		sessionRole: Role
+	): Contributor
+
+	editContributor (
+		contributorId: ID = null
+		email: String = null
+		forename: String = null
+		surname: String = null
+		projectRole: Role = null
+		sessionRole: Role = null
+	): Boolean!
 
 	assignProjectRole (
-		contributorId: ID!,
+		contributorId: ID!
 		roleId: ID!
 	): Boolean!
 
 	assignSessionRole (
-		contributorId: ID!,
+		contributorId: ID!
 		roleId: ID!
 	): Boolean!
+
+	createProjectRole (
+		title: String!
+		description: String = null
+	): Role
+
+	createSessionRole (
+		title: String!
+		description: String = null
+	): Role
+
+# UPLOADS ##########################
+
+# Uploading files has to be handled via classic REST methods
+
+	editUpload (
+		uploadId: ID!
+		displayName: String!
+	): Upload
 
 
 # MARK ##########################
@@ -60,8 +104,8 @@ type Mutation
 
 	# null properties won’t change
 	# for deletion use empty strings/arrays
-	updateMark (
-		markId: ID!,
+	editMark (
+		markId: ID!
 		mark: MarkInput!
 	): ID # null on error
 
@@ -69,53 +113,53 @@ type Mutation
 # ARRANGEMENTS ##########################
 
 	createArrangement (
-		session: ID!,
+		session: ID!
 		title: String = null
 		description: String = null
 		contributors: [Contributor!]
 	): ID!
 
-	updateArrangement (
-		arrangementId: ID!,
-		title: String = null,
-		description: String = null,
+	editArrangement (
+		arrangementId: ID!
+		title: String = null
+		description: String = null
 		contributors: [ID!] = null
 	): Arrangement!
 
 	createArrangedMark (
-		arrangementId: ID!,
-		markId: ID = null,
+		arrangementId: ID!
+		markId: ID = null
 		coordinate: ArrangementCoordinateInput!
 	): ID!
 
-	updateArrangedMark (
-		arrangedMarkId: ID!,
+	editArrangedMark (
+		arrangedMarkId: ID!
 		coordinate: ArrangementCoordinateInput = null
-	): ArrangedMark!
+	): ArrangedMark
 
 	createArrangedLabel (
-		arrangementId: ID!,
-		title: String = null,
-		description: String = null,
+		arrangementId: ID!
+		title: String = null
+		description: String = null
 		coordinate: ArrangementCoordinateInput!
 	): Boolean!
 
-	updateArrangedLabel (
-		arrangedLabelId: ID!,
-		title: String = null,
-		description: String = null,
+	editArrangedLabel (
+		arrangedLabelId: ID!
+		title: String = null
+		description: String = null
 		coordinate: ArrangementCoordinateInput = null
 	): Boolean!
 
 	createArrangedConnection (
-		arrangementId: ID!,
-		fromCoordinate: ArrangementCoordinateInput!,
+		arrangementId: ID!
+		fromCoordinate: ArrangementCoordinateInput!
 		toCoordinate: ArrangementCoordinateInput!
 	): Boolean!
 
-	updateArrangedConnection (
-		arrangedConnectionId: ID!,
-		fromCoordinate: ArrangementCoordinateInput = null,
+	editArrangedConnection (
+		arrangedConnectionId: ID!
+		fromCoordinate: ArrangementCoordinateInput = null
 		toCoordinate: ArrangementCoordinateInput = null
 	): Boolean!
 
@@ -133,14 +177,10 @@ type Mutation
 
 # PERMISSIONS ##########################
 
-	addPermission (
-		contributionId: ID!, # Upload, Mark, Arrangement
+	setPermission (
+		contributionId: ID! # Upload, Mark, Arrangement
 		contributorId: ID!
-	): Boolean!
-
-	removePermission (
-		contributionId: ID!, # Upload, Mark, Arrangement
-		contributorId: ID!
+		permission: Permission!
 	): Boolean!
 }
 
