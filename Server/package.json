@@ -1,0 +1,14 @@
+{
+  "name": "",
+  "version": "0.0.1",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": ""
+  },
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "graphql": "^14.5.8"
+  }
+}
