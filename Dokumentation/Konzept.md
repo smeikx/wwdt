@@ -42,20 +42,23 @@ Eine `Session` wird nie explizit beendet, sie kann jederzeit weiter fortgeführt
 
 Bei `Marks` handelt es sich um Datenbehälter, die zumindest aus einem *Timestamp* und einem *Titel* bestehen. Weiters können sie eine *Beschreibung, Tags, Uploads* und *Bildpositionen* (Koordinatenpaar im Frame eines Video-Recordign-Streams) beinhalten.
 
-Jeder *Upload* wird automatisch an einen `Mark` gebunden, ein *Upload* kann aber beliebig oft von anderen `Marks` referenziert werden.
+### `Uploads`
+
+`Uploads` werden automatisch an einen `Mark` gebunden, ein `Upload` kann aber beliebig oft von anderen `Marks` referenziert werden.  
+Auch `Uploads` können mit Tags versehen werden.
 
 ### `Arrangements`
 
-In einem `Arrangement` werden bestehende `Marks` referenziert und (von Zeit ungebunden) zweidimensional angeordnet. Zweck eines `Arrangements` ist es, Beziehungen zwischen `Marks` auszudrücken – primär durch verschiedene Distanzen zueinander.
+In einem `Arrangement` werden *Assets* – `Marks` und `Uploads` – referenziert und (von Zeit ungebunden) zweidimensional angeordnet. Zweck eines `Arrangements` ist es, Beziehungen zwischen *Assets* auszudrücken – primär durch verschiedene Distanzen zueinander.
 
-Zusätzlich zu `Marks` können auch *Labels* und *Verbindungen* erstellt und platziert werden. *Labels* bestehen aus einem *Titel* und einer optionalen *Beschreibung*, *Verbindungen* beschreiben lediglich zwei zusammengehörige Positionen.
+Zusätzlich zu *Assets* können auch *Labels* und *Verbindungen* erstellt und platziert werden. *Labels* bestehen aus einem *Titel* und einer optionalen *Beschreibung*, *Verbindungen* beschreiben lediglich zwei zusammengehörige *Assets* oder *Labels*.
 
-Die Platzierung von Daten ist an ein Raster gebunden: pro Zelle ein `Mark` oder *Label*. Das Raster kann theoretisch unbeschränkt erweitert werden.
+Die Platzierung von Daten ist an ein Raster gebunden: pro Zelle ein *Asset* oder *Label*. Das Raster kann theoretisch unbeschränkt erweitert werden und beliebig skaliert dargestellt werden.
 
 
 ## Zugriffsberechtigung
 
-`Contributors` haben die Kontrolle über Sichtbarkeit und Bearbeitbarkeit ihrer Beiträge (`Marks` und `Arrangements`): Sie können wählen, wer welchen Beitrag sehen und wer ihn auch bearbeiten darf.
+`Contributors` haben die Kontrolle über Sichtbarkeit und Bearbeitbarkeit ihrer Beiträge (`Marks`, `Uploads`, `Arrangements`): Sie können wählen, wer welchen Beitrag sehen und wer ihn auch bearbeiten darf.
 
 Möglicherweise gibt es Rollen, deren Träger sich über die individuell festgelegten Berechtigungen hinwegsetzen können.
 Die *Session-Leitung* kann zudem die Default-Berechtigung von neu erstellten Beiträgen festlegen.
