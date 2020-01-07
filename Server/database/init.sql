@@ -196,6 +196,15 @@ CREATE TABLE tags_per_mark (
 );
 
 
+CREATE TABLE tags_per_upload (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	fk_upload_id INT NOT NULL,
+		FOREIGN KEY(fk_upload_id) REFERENCES uploads(id),
+	fk_tag_id INT NOT NULL,
+		FOREIGN KEY(fk_tag_id) REFERENCES tags(id)
+);
+
+
 -- deliberately allows multiple positions per timestamped mark
 -- coordinates range between 0 and 1, describing the position relative to the upper left corner of a frame
 CREATE TABLE frame_positions_per_timestamped_mark (
