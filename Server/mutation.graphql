@@ -107,7 +107,7 @@ type Mutation
 	editMark (
 		markId: ID!
 		mark: MarkInput!
-	): ID # null on error
+	): Boolean!
 
 
 # ARRANGEMENTS ##########################
@@ -161,6 +161,13 @@ type Mutation
 		arrangedConnectionId: ID!
 		fromCoordinate: ArrangementCoordinateInput = null
 		toCoordinate: ArrangementCoordinateInput = null
+	): Boolean!
+
+
+# DELETION ##########################
+
+	deleteContribution (
+		contributionId: ID!
 	): Boolean!
 
 
