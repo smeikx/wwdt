@@ -26,7 +26,7 @@ eine von *Contributors* hochgeladene Datei
 eine Fläche, auf der *Assets* referenziert und angeordnet werden können
 
 # Objekt
-alles, was sich in einem *Arrangement* befindet (arrangierte *Markers* & *Uploads* sowie *Labels* und *Verbindungen*)
+alles, was sich in einem *Arrangement* befindet (arrangierte *Markers* & *Uploads* sowie *Labels*), außer *Verbindungen*
 
 # Asset
 *Objekte*, die außerhalb von *Arrangements* entstehen, sprich *Marker* und *Uploads*

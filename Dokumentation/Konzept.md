@@ -49,9 +49,9 @@ Auch `Uploads` können mit Tags versehen werden.
 
 ### `Arrangements`
 
-In einem `Arrangement` werden *Assets* – `Marks` und `Uploads` – referenziert und (von Zeit ungebunden) zweidimensional angeordnet. Zweck eines `Arrangements` ist es, Beziehungen zwischen *Assets* auszudrücken – primär durch verschiedene Distanzen zueinander.
+In einem `Arrangement` werden *Assets* – `Marks` und `Uploads` – referenziert und als *Objekte* (von Zeit ungebunden) zweidimensional angeordnet. Zweck eines `Arrangements` ist es, Beziehungen zwischen *Assets* auszudrücken – primär durch verschiedene Distanzen zueinander.
 
-Zusätzlich zu *Assets* können auch *Labels* und *Verbindungen* erstellt und platziert werden. *Labels* bestehen aus einem *Titel* und einer optionalen *Beschreibung*, *Verbindungen* beschreiben lediglich zwei zusammengehörige *Assets* oder *Labels*.
+Um *Assets* zu ergänzen, können *Labels* und *Verbindungen* erstellt und platziert werden. *Labels* bestehen aus einem *Titel* und einer optionalen *Beschreibung*, *Verbindungen* beschreiben lediglich zwei zusammengehörige *Objekte*.
 
 Die Platzierung von Daten ist an ein Raster gebunden: pro Zelle ein *Asset* oder *Label*. Das Raster kann theoretisch unbeschränkt erweitert werden und beliebig skaliert dargestellt werden.
 
