@@ -247,43 +247,80 @@ CREATE TABLE arrangements (
 -- coordinates refer to a single cell and are relative to the centre of the grid
 -- (0, 0 is the cell in the centre)
 
+CREATE TABLE object_data (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	x INT NOT NULL,
+	y INT NOT NULL
+	/*
+	width INT NOT NULL,
+	height INT NOT NULL
+	*/
+);
+
 
 CREATE TABLE marks_per_arrangement (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	fk_arrangement_id INT NOT NULL,
 		FOREIGN KEY(fk_arrangement_id) REFERENCES arrangements(id),
-	fk_contributor_id INT NOT NULL,
-		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	fk_mark_id INT NOT NULL,
 		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
-	x INT NOT NULL,
-	y INT NOT NULL
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
+	fk_object_data_id INT NOT NULL,
+		FOREIGN KEY(fk_object_data_id) REFERENCES object_data(id)
 );
 
 
-CREATE TABLE labels_per_arrangement (
+CREATE TABLE uploads_per_arrangement (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	fk_arrangement_id INT NOT NULL,
 		FOREIGN KEY(fk_arrangement_id) REFERENCES arrangements(id),
+	fk_upload_id INT NOT NULL,
+		FOREIGN KEY(fk_upload_id) REFERENCES uploads(id),
 	fk_contributor_id INT NOT NULL,
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
-	title VARCHAR(127) NOT NULL,
-	description VARCHAR(511),
-	x INT NOT NULL,
-	y INT NOT NULL
+	fk_object_data_id INT NOT NULL,
+		FOREIGN KEY(fk_object_data_id) REFERENCES object_data(id)
 );
 
+
+CREATE TABLE labels (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	fk_arrangement_id INT NOT NULL,
+		FOREIGN KEY(fk_arrangement_id) REFERENCES arrangements(id),
+	title VARCHAR(127) NOT NULL,
+	describtion TEXT,
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
+	fk_object_data_id INT NOT NULL,
+		FOREIGN KEY(fk_object_data_id) REFERENCES object_data(id)
+);
+
+
+/* XXX ONE COLUMN, MULTIPLE DIFFERENT FOREIGN KEYS
+In order to refer to different tables within one column,
+an additional column containing an enum is used to keep
+track of the referenced table:
+
+	mark → marks_per_arrangement.id
+	upload → uploads_per_arrangement.id
+	label → labels.id
+
+The enum approch has been chosen over more ‘correct’ methods,
+(like https://stackoverflow.com/a/7844911), in order to
+achieve better readability and easier to construct queries
+*/
 
 CREATE TABLE connections_per_arrangement (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_arrangement_id INT NOT NULL,
-		FOREIGN KEY(fk_arrangement_id) REFERENCES arrangements(id),
 	fk_contributor_id INT NOT NULL,
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
-	from_x INT NOT NULL,
-	from_y INT NOT NULL,
-	to_x INT NOT NULL,
-	to_y INT NOT NULL
+	from_object_type ENUM('mark', 'upload', 'label') NOT NULL,
+	fk_from_object_id INT NOT NULL,
+	to_object_type ENUM('mark', 'upload', 'label') NOT NULL,
+	fk_to_object_id INT NOT NULL
+	-- TODO: create a TRIGGER, as proposed here:
+	-- https://stackoverflow.com/a/56699758
 );
 
 
