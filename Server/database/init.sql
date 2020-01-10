@@ -244,17 +244,19 @@ CREATE TABLE arrangements (
 );
 
 
--- coordinates refer to a single cell and are relative to the centre of the grid
--- (0, 0 is the cell in the centre)
+/* POSITION & SIZE
+Coordinates refer to a single cell and are relative to the centre of the grid,
+(0, 0 is the cell in the centre).
+‘width’ and ‘height’ describe how far an object extends to the right and downwards respectively.
+If width and height are both 0, the object occupies one cell.
+*/
 
 CREATE TABLE object_data (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	x INT NOT NULL,
-	y INT NOT NULL
-	/*
-	width INT NOT NULL,
-	height INT NOT NULL
-	*/
+	y INT NOT NULL,
+	width INT UNSIGNED 0,
+	height INT UNSIGNED 0
 );
 
 

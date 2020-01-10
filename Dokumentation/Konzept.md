@@ -53,7 +53,7 @@ In einem `Arrangement` werden *Assets* – `Marks` und `Uploads` – referenzier
 
 Um *Assets* zu ergänzen, können *Labels* und *Verbindungen* erstellt und platziert werden. *Labels* bestehen aus einem *Titel* und einer optionalen *Beschreibung*, *Verbindungen* beschreiben lediglich zwei zusammengehörige *Objekte*.
 
-Die Platzierung von Daten ist an ein Raster gebunden: pro Zelle ein *Asset* oder *Label*. Das Raster kann theoretisch unbeschränkt erweitert werden und beliebig skaliert dargestellt werden.
+Um Überlappungen zu vermeiden und die Platzierung zu erleichtern, sind *Objekte* an ein Raster gebunden; jedes *Objekt* kann sowohl horizontal als auch vertikal beliebig viele Zellen in Anspruch nehmen. Das Raster kann theoretisch unbeschränkt erweitert und beliebig skaliert dargestellt werden.
 
 
 ## Zugriffsberechtigung
