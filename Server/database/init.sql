@@ -30,7 +30,9 @@ are of type BIT(2)
 ------------------
 00 → invisible
 01 → visible
-10 → editable */
+10 → editable
+11 → permission changeable
+ */
 
 
 CREATE TABLE episodes (
