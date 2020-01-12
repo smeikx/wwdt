@@ -3,12 +3,14 @@ scalar URL # String
 
 union Contribution = Upload | Mark | Arrangement
 
-
-type Role
+interface Contribution
 {
 	id: ID!
 	title: String!
+	creator: Contributor!
 	description: String
+	coContributors: [CoContributor!]
+	permission: Permission!
 }
 
 
@@ -19,19 +21,17 @@ type Project
 	creationTime: Datetime!
 	description: String
 	sessions: [Session!]
-	contributors: [Contributor!]
+	coContributors: [CoContributor!]
 }
 
 
-# sequential parts of one session
-# they are created when one session is paused and later resumed
-type Episode
+type Role
 {
-	start: Datetime!
-	end: Datetime!
-	marks: [Mark!]
-	uploads: [Upload!]
+	id: ID!
+	title: String!
+	description: String
 }
+
 
 type Session
 {
@@ -40,7 +40,7 @@ type Session
 	description: String
 	start: Datetime!
 	end: Datetime!
-	contributors: [Contributor!]
+	coContributors: [CoContributor!]
 	episodes: [Episode!]
 	markers: [Mark!]
 	uploads: [Upload!]
@@ -50,6 +50,14 @@ type Session
 	defaultPermission: Permission!
 }
 
+# sequential parts of one session
+type Episode
+{
+	start: Datetime!
+	end: Datetime!
+	marks: [Mark!]
+	uploads: [Upload!]
+}
 
 type Recording
 {
@@ -57,57 +65,14 @@ type Recording
 	url: URL!
 	creationTime: Datetime!
 	duration: Int!
+	mediaType: RecordingType!
 }
 
-
-type ArrangementCoordinate
+enum RecordingType
 {
-	x: Int!
-	y: Int!
+	AUDIO
+	VIDEO
 }
-
-input ArrangementCoordinateInput
-{
-	x: Int!
-	y: Int!
-}
-
-
-type ArrangedMark
-{
-	mark: Mark!
-	position: ArrangementCoordinate!
-	creator: Contributor!
-}
-
-type ArrangedConnection
-{
-	from: ArrangementCoordinate!
-	to: ArrangementCoordinate!
-	creator: Contributor!
-}
-
-type ArrangedLabel
-{
-	title: String!
-	description: String
-	position: ArrangementCoordinate!
-	creator: Contributor!
-}
-
-type Arrangement
-{
-	title: String!
-	description: String
-	creator: Contributor!
-	contributors: [Contributor]
-	marks: [ArrangedMark!]
-	connections: [ArrangedConnection!]
-	labels: [ArrangedLabel!]
-	editable: Boolean!
-	isOwn: Boolean!
-}
-
 
 type Contributor
 {
@@ -123,10 +88,27 @@ type Contributor
 	sessions: [Session!]
 }
 
-type Contributors
+
+# for contributors excluding the creator
+type CoContributor
 {
-	readers: [Contributor!]
-	editors: [Contributor!]
+	contributor: Contributor!
+	permission: Permission!
+}
+
+
+type Upload implements Contribution
+{
+	id: ID!
+	creator: Contributor!
+	uploadTime: Datetime!
+	uploadName: String!
+	title: String!
+	description: String
+	url: URL!
+	mediaType: MediaType!
+	coContributors: [CoContributor!]
+	permission: Permission!
 }
 
 enum MediaType
@@ -137,19 +119,6 @@ enum MediaType
 	UNKNOWN
 }
 
-type Upload
-{
-	id: ID!
-	creator: Contributor!
-	uploadTime: Datetime!
-	uploadName: String!
-	displayName: String!
-	url: URL!
-	mediaType: MediaType!
-	contributors: [Contributor!]
-	editable: Boolean!
-	isOwn: Boolean!
-}
 
 type Mark
 {
@@ -161,9 +130,14 @@ type Mark
 	uploads: [Upload!]
 	frameCoordinates: [FrameCoordinate!]
 	creator: Contributor!
-	contributors: [Contributor!]
-	editable: Boolean!
-	isOwn: Boolean!
+	coContributors: [CoContributor!]
+	permission: Permission!
+}
+
+input CoContributorInput
+{
+	contributorId: ID!
+	permission: Permission!
 }
 
 input MarkInput
@@ -174,7 +148,7 @@ input MarkInput
 	tags: [String!]
 	uploads: [ID!]
 	frameCoordinates: FrameCoordinateInput
-	contributors: [Contributor!]
+	coContributors: [CoContributorInput!]
 }
 
 
@@ -205,8 +179,71 @@ type Recorder
 
 enum Permission
 {
-	READABLE # only readable, not editable
-	EDITABLE # editable exluding own
-	NONE # invisible to others
+	READ # only readable, not editable
+	EDIT # editable, exluding changing Permissions
+	PERMIT # editable, including changing Permissions
+}
+
+
+type ArrangementCoordinate
+{
+	x: Int!
+	y: Int!
+}
+
+input ArrangementCoordinateInput
+{
+	x: Int!
+	y: Int!
+}
+
+union Arrangeable = Mark | Upload | Label
+
+interface Object
+{
+	object: Arrangeable!
+	position: ArrangementCoordinate!
+	width: Int
+	height: Int
+	creator: Contributor!
+}
+
+type ArrangedMark implements Object
+{
+	object: Arrangeable! # Mark!
+	position: ArrangementCoordinate!
+	width: Int
+	height: Int
+	creator: Contributor!
+}
+
+type ArrangedConnection
+{
+	from: Arrangeable!
+	to: Arrangeable!
+	creator: Contributor!
+}
+
+type ArrangedLabel implements Object
+{
+	object: Arrangeable! # Mark!
+	title: String!
+	description: String
+	position: ArrangementCoordinate!
+	width: Int
+	height: Int
+	creator: Contributor!
+}
+
+type Arrangement implements Contribution
+{
+	title: String!
+	description: String
+	creator: Contributor!
+	marks: [ArrangedMark!]
+	connections: [ArrangedConnection!]
+	labels: [ArrangedLabel!]
+	coContributors: [CoContributor]
+	permission: Permission!
 }
 
