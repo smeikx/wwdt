@@ -36,7 +36,11 @@ Eine `Session` umfasst sämtliche Daten, die während und nach einer Diskussion 
 - beliebige Uploads
 - `Arrangements` (hergestellte Beziehungen zwischen Daten)
 
-Eine `Session` wird nie explizit beendet, sie kann jederzeit weiter fortgeführt werden.
+Eine `Session` wird nie explizit beendet, sie kann jederzeit weiter fortgeführt werden. 
+
+### `Episodes`
+
+`Sessions` werden in `Episodes` unterteilt. Jede `Session` besteht aus mindestens einer `Episode`, wird eine `Session` beendet (pausiert) und zu einem beliebigen späteren Zeitpunkt fortgesetzt, entsteht eine weitere `Episode`.
 
 ### `Marks`
 

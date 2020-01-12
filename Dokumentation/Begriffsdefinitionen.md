@@ -40,3 +40,6 @@ Linien, die zwei arrangierte *Objekte* (*Assets*, *Labels*) verbinden
 # Tags
 *Markern* und *Uploads* zuweisbare Schlagworte eines *Projektes*
 
+# Episode
+wird eine *SEssion* fortgesetzt, entsteht eine *Episode*; die einfachste *Session* hatz bloß eine einzige *Episode*
+

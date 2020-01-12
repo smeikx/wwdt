@@ -33,7 +33,7 @@ are of type BIT(2)
 10 → editable */
 
 
-CREATE TABLE session_timestamps (
+CREATE TABLE episodes (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	fk_session_id INT NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
