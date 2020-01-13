@@ -1,18 +1,11 @@
+### SCALARS
+
 scalar Datetime # milliseconds since 1970-01-01, 00:00:00 UTC
 scalar URL # String
 
-union Contribution = Upload | Mark | Arrangement
 
-interface Contribution
-{
-	id: ID!
-	title: String!
-	creator: Contributor!
-	description: String
-	coContributors: [CoContributor!]
-	permission: Permission!
-}
 
+### PROJECT
 
 type Project
 {
@@ -25,13 +18,8 @@ type Project
 }
 
 
-type Role
-{
-	id: ID!
-	title: String!
-	description: String
-}
 
+### SESSION
 
 type Session
 {
@@ -53,11 +41,16 @@ type Session
 # sequential parts of one session
 type Episode
 {
+	id: ID!
 	start: Datetime!
 	end: Datetime!
 	marks: [Mark!]
 	uploads: [Upload!]
 }
+
+
+
+### RECORDING
 
 type Recording
 {
@@ -74,6 +67,18 @@ enum RecordingType
 	VIDEO
 }
 
+type Recorder
+{
+	id: ID!
+	name: String!
+	description: String
+	previewUrl: URL
+}
+
+
+
+### CONTRIBUTORS
+
 type Contributor
 {
 	id: ID!
@@ -88,7 +93,6 @@ type Contributor
 	sessions: [Session!]
 }
 
-
 # for contributors excluding the creator
 type CoContributor
 {
@@ -96,6 +100,47 @@ type CoContributor
 	permission: Permission!
 }
 
+input CoContributorInput
+{
+	contributorId: ID!
+	permission: Permission!
+}
+
+
+
+### ROLES & PERMISSIONS
+
+type Role
+{
+	id: ID!
+	title: String!
+	description: String
+}
+
+enum Permission
+{
+	READ # only readable, not editable
+	EDIT # editable, exluding changing Permissions
+	PERMIT # editable, including changing Permissions
+}
+
+
+
+### CONTRIBUTION
+
+interface Contribution
+{
+	id: ID!
+	title: String!
+	creator: Contributor!
+	description: String
+	coContributors: [CoContributor!]
+	permission: Permission!
+}
+
+
+
+### UPLOAD
 
 type Upload implements Contribution
 {
@@ -120,6 +165,9 @@ enum MediaType
 }
 
 
+
+### MARK
+
 type Mark
 {
 	id: ID!
@@ -134,12 +182,6 @@ type Mark
 	permission: Permission!
 }
 
-input CoContributorInput
-{
-	contributorId: ID!
-	permission: Permission!
-}
-
 input MarkInput
 {
 	title: String
@@ -150,7 +192,6 @@ input MarkInput
 	frameCoordinates: FrameCoordinateInput
 	coContributors: [CoContributorInput!]
 }
-
 
 # between 0 and 1; relative to the upper left corner
 type FrameCoordinate
@@ -168,22 +209,72 @@ input FrameCoordinateInput
 }
 
 
-type Recorder
+
+### ARRANGEMENTS
+
+type Arrangement implements Contribution
 {
 	id: ID!
-	name: String!
+	title: String!
 	description: String
-	previewUrl: URL
+	creator: Contributor!
+	marks: [ArrangedMark!]
+	connections: [ArrangedConnection!]
+	labels: [ArrangedLabel!]
+	coContributors: [CoContributor]
+	permission: Permission!
 }
 
+# union Arrangeable = Mark | Upload | Label
 
-enum Permission
+interface Object
 {
-	READ # only readable, not editable
-	EDIT # editable, exluding changing Permissions
-	PERMIT # editable, including changing Permissions
+	id: ID!
+	position: ArrangementCoordinate!
+	width: Int
+	height: Int
+	creator: Contributor!
 }
 
+type ArrangedMark implements Object
+{
+	id: ID!
+	mark: Mark!
+	object: Arrangeable! # Mark!
+	position: ArrangementCoordinate!
+	width: Int
+	height: Int
+	creator: Contributor!
+}
+
+type ArrangedUpload implements Object
+{
+	id: ID!
+	upload: Upload!
+	position: ArrangementCoordinate!
+	width: Int
+	height: Int
+	creator: Contributor!
+}
+
+type ArrangedLabel implements Object
+{
+	id: ID!
+	title: String!
+	description: String
+	position: ArrangementCoordinate!
+	width: Int
+	height: Int
+	creator: Contributor!
+}
+
+type ArrangedConnection
+{
+	id: ID!
+	from: Arrangeable!
+	to: Arrangeable!
+	creator: Contributor!
+}
 
 type ArrangementCoordinate
 {
@@ -195,55 +286,5 @@ input ArrangementCoordinateInput
 {
 	x: Int!
 	y: Int!
-}
-
-union Arrangeable = Mark | Upload | Label
-
-interface Object
-{
-	object: Arrangeable!
-	position: ArrangementCoordinate!
-	width: Int
-	height: Int
-	creator: Contributor!
-}
-
-type ArrangedMark implements Object
-{
-	object: Arrangeable! # Mark!
-	position: ArrangementCoordinate!
-	width: Int
-	height: Int
-	creator: Contributor!
-}
-
-type ArrangedConnection
-{
-	from: Arrangeable!
-	to: Arrangeable!
-	creator: Contributor!
-}
-
-type ArrangedLabel implements Object
-{
-	object: Arrangeable! # Mark!
-	title: String!
-	description: String
-	position: ArrangementCoordinate!
-	width: Int
-	height: Int
-	creator: Contributor!
-}
-
-type Arrangement implements Contribution
-{
-	title: String!
-	description: String
-	creator: Contributor!
-	marks: [ArrangedMark!]
-	connections: [ArrangedConnection!]
-	labels: [ArrangedLabel!]
-	coContributors: [CoContributor]
-	permission: Permission!
 }
 
