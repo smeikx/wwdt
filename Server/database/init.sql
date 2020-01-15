@@ -48,6 +48,7 @@ CREATE TABLE episodes (
 CREATE TABLE media_types (
 	id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	media_type VARCHAR(63) NOT NULL UNIQUE
+	description VARCHAR(511)
 );
 
 
@@ -57,7 +58,7 @@ CREATE TABLE recordings (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	fk_session_id INT NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
-	media_type ENUM('audio', 'video') NOT NULL,
+	recording_type ENUM('audio', 'video') NOT NULL,
 	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	duration INT UNSIGNED, -- in seconds
 	file_path VARCHAR(255) NOT NULL UNIQUE
