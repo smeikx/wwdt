@@ -47,7 +47,7 @@ CREATE TABLE episodes (
 -- known types of media files
 CREATE TABLE media_types (
 	id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	media_type VARCHAR(63) NOT NULL UNIQUE
+	media_type VARCHAR(63) NOT NULL UNIQUE,
 	description VARCHAR(511)
 );
 
