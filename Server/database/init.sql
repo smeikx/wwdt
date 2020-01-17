@@ -165,6 +165,19 @@ CREATE TABLE marks (
 );
 
 
+CREATE TABLE ratings_per_mark (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	fk_mark_id INT NOT NULL UNIQUE,
+		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
+	fk_contributor_id INT NOT NULL UNIQUE,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
+	rating TINYINT,
+
+	CONSTRAINT unique_rating_per_user_per_mark
+		UNIQUE (fk_mark_id, fk_contributor_id)
+);
+
+
 CREATE TABLE timestamps_per_mark (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	fk_mark_id INT NOT NULL UNIQUE, -- not PRIMARY to potentially allow multiple timestamps per mark
