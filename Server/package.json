@@ -1,0 +1,15 @@
+{
+  "name": "Tisch-Server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'no tests set up'"
+  },
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "graphql": "^14.5.8",
+    "mariadb": "^2.1.5"
+  }
+}
