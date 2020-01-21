@@ -10,7 +10,7 @@ apt install -y \
 	vim
 
 # Set up Node.js
-## run npm -i
+npm init
 ## copy/symlink files to locations
 
 # Set up Nginx
