@@ -25,7 +25,7 @@ CREATE TABLE sessions (
 );
 
 
-CREATE TABLE episodes (
+CREATE TABLE segments (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	fk_session_id INT NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
