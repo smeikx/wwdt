@@ -321,36 +321,6 @@ CREATE TABLE connections_per_arrangement (
 
 
 
-CREATE TABLE permission_per_upload (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_upload_id INT NOT NULL,
-		FOREIGN KEY(fk_upload_id) REFERENCES uploads(id),
-	fk_contributor_id INT NOT NULL,
-		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
-	permission BIT(2) NOT NULL
-);
-
-
-CREATE TABLE permission_per_mark (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_mark_id INT NOT NULL,
-		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
-	fk_contributor_id INT NOT NULL,
-		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
-	permission BIT(2) NOT NULL
-);
-
-
-CREATE TABLE permission_per_arrangement (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_arrangement_id INT NOT NULL,
-		FOREIGN KEY(fk_arrangement_id) REFERENCES arrangements(id),
-	fk_contributor_id INT NOT NULL,
-		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
-	permission BIT(2) NOT NULL
-);
-
-
 CREATE TABLE permission_per_role (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	fk_role_id TINYINT UNSIGNED NOT NULL,
