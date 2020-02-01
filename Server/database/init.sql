@@ -85,14 +85,8 @@ CREATE TABLE contributors (
 );
 
 
-CREATE TABLE project_roles (
-	id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	title VARCHAR(127) UNIQUE NOT NULL,
-	description VARCHAR(127)
-);
-
-
-CREATE TABLE session_roles (
+-- combine project and session roles for structural simplicity
+CREATE TABLE roles (
 	id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(127) UNIQUE NOT NULL,
 	description VARCHAR(127)
@@ -106,7 +100,7 @@ CREATE TABLE role_per_project (
 	fk_contributor_id INT NOT NULL,
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	fk_role_id TINYINT UNSIGNED NOT NULL,
-		FOREIGN KEY(fk_role_id) REFERENCES project_roles(id)
+		FOREIGN KEY(fk_role_id) REFERENCES roles(id)
 );
 
 
@@ -117,7 +111,7 @@ CREATE TABLE role_per_session (
 	fk_contributor_id INT NOT NULL,
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	fk_role_id TINYINT UNSIGNED NOT NULL,
-		FOREIGN KEY(fk_role_id) REFERENCES session_roles(id)
+		FOREIGN KEY(fk_role_id) REFERENCES roles(id)
 );
 
 
@@ -357,18 +351,10 @@ CREATE TABLE permission_per_arrangement (
 );
 
 
-CREATE TABLE permission_per_session_role (
+CREATE TABLE permission_per_role (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	fk_role_id TINYINT UNSIGNED NOT NULL,
-		FOREIGN KEY(fk_role_id) REFERENCES session_roles(id),
-	permission BIT(2) NOT NULL
-);
-
-
-CREATE TABLE permission_per_project_role (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_role_id TINYINT UNSIGNED NOT NULL,
-		FOREIGN KEY(fk_role_id) REFERENCES project_roles(id),
+		FOREIGN KEY(fk_role_id) REFERENCES roles(id),
 	permission BIT(2) NOT NULL
 );
 
