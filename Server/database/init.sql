@@ -22,17 +22,7 @@ CREATE TABLE sessions (
 	fk_project_id INT NOT NULL,
 		FOREIGN KEY(fk_project_id) REFERENCES projects(id),
 	title VARCHAR(127) NOT NULL,
-	default_permission BIT(2) DEFAULT b'10'
 );
-
-/* PERMISSIONS
-are of type BIT(2)
-------------------
-00 → invisible
-01 → visible
-10 → editable
-11 → permission changeable
- */
 
 
 CREATE TABLE episodes (
@@ -320,11 +310,17 @@ CREATE TABLE connections_per_arrangement (
 );
 
 
+CREATE TABLE permissions (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(127) NOT NULL,
+	description VARCHAR(511)
+);
 
 CREATE TABLE permission_per_role (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	fk_role_id TINYINT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_role_id) REFERENCES roles(id),
-	permission BIT(2) NOT NULL
+	fk_permission_id INT NOT NULL,
+		FOREIGN KEY(fk_permission_id) REFERENCES permissions(id)
 );
 
