@@ -38,7 +38,7 @@ CREATE TABLE segments (
 CREATE TABLE media_types (
 	id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	media_type VARCHAR(63) NOT NULL UNIQUE,
-	description VARCHAR(511)
+	description VARCHAR(510)
 );
 
 
@@ -223,7 +223,7 @@ CREATE TABLE arrangements (
 	fk_contributor_id INT NOT NULL,
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	title VARCHAR(127) NOT NULL,
-	description VARCHAR(511),
+	description VARCHAR(510),
 	creation_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -313,7 +313,7 @@ CREATE TABLE connections_per_arrangement (
 CREATE TABLE permissions (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(127) NOT NULL,
-	description VARCHAR(511)
+	description VARCHAR(510)
 );
 
 CREATE TABLE permission_per_role (
