@@ -119,6 +119,66 @@ CREATE TABLE contributors_per_session (
 
 
 
+-- marks are time-bound, user-generated pieces of information
+CREATE TABLE marks (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	fk_session_id INT NOT NULL,
+		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
+	fk_metadata_id INT UNIQUE NOT NULL,
+		FOREIGN KEY(fk_metadata_id) REFERENCES metadata(id),
+	`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE assets (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	fk_session_id INT NOT NULL,
+		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
+	fk_metadata_id INT UNIQUE NOT NULL,
+		FOREIGN KEY(fk_metadata_id) REFERENCES metadata(id),
+	`type` VARCHAR(63) NOT NULL,
+	content TEXT NOT NULL
+);
+
+
+CREATE TABLE metadata (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	title VARCHAR(255) NOT NULL,
+	description VARCHAR(510),
+	creation_time DATE DEFAULT CURRENT_TIMESTAMP,
+	fk_creator INT NOT NULL,
+		FOREIGN KEY(fk_creator) REFERENCES contributors(id),
+	-- tags TODO: SQLicious-Fulltext, Toxi oder ein Hybrid?
+);	
+
+
+CREATE TABLE ratings_per_metadata (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	fk_metadata_id INT UNIQUE NOT NULL,
+		FOREIGN KEY(fk_metadata_id) REFERENCES metadata(id),
+	fk_contributor_id INT NOT NULL UNIQUE,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
+	rating TINYINT NOT NULL,
+
+	CONSTRAINT unique_rating_per_user_per_metadata
+		UNIQUE (fk_metadata_id, fk_contributor_id)
+);
+
+
+-- Items can refer to multiple other items.
+CREATE TABLE metadata_per_metadata (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	fk_from_metadata_id INT UNIQUE NOT NULL,
+		FOREIGN KEY(fk_from_metadata_id) REFERENCES metadata(id),
+	fk_to_metadata_id INT UNIQUE NOT NULL,
+		FOREIGN KEY(fk_to_metadata_id) REFERENCES metadata(id),
+	title VARCHAR(127)
+);
+
+
+
+-- Only for keeping track of uploads and quickly querying/filtering them;
+-- no other table refers to this table, only to the file itself.
 -- Paths match the following pattern:
 -- …/project_title-id/session_title-id/contributor_name-id/upload_id.foo
 CREATE TABLE uploads (
@@ -130,44 +190,12 @@ CREATE TABLE uploads (
 	upload_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	upload_name VARCHAR(255) NOT NULL,
 	display_name VARCHAR(255) NOT NULL,
-	file_path VARCHAR(511) UNIQUE NOT NULL,
+	file_path VARCHAR(510) UNIQUE NOT NULL,
 	media_type TINYINT UNSIGNED,
 		FOREIGN KEY(media_type) REFERENCES media_types(id)
 );
 
 
--- marks are time-bound, user-generated pieces of information
-CREATE TABLE marks (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_session_id INT NOT NULL,
-		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
-	fk_contributor_id INT NOT NULL,
-		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
-	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	title VARCHAR(127) NOT NULL,
-	description TEXT
-);
-
-
-CREATE TABLE ratings_per_mark (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_mark_id INT NOT NULL UNIQUE,
-		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
-	fk_contributor_id INT NOT NULL UNIQUE,
-		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
-	rating TINYINT,
-
-	CONSTRAINT unique_rating_per_user_per_mark
-		UNIQUE (fk_mark_id, fk_contributor_id)
-);
-
-
-CREATE TABLE timestamps_per_mark (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_mark_id INT NOT NULL UNIQUE, -- not PRIMARY to potentially allow multiple timestamps per mark
-		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
-	`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
 
 
 -- tags for associating marks with each other
@@ -193,25 +221,6 @@ CREATE TABLE tags_per_mark (
 
 	CONSTRAINT unique_tag_per_mark
 		UNIQUE (fk_mark_id, fk_tag_id)
-);
-
-
-CREATE TABLE tags_per_upload (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_upload_id INT NOT NULL,
-		FOREIGN KEY(fk_upload_id) REFERENCES uploads(id),
-	fk_tag_id INT NOT NULL,
-		FOREIGN KEY(fk_tag_id) REFERENCES tags(id)
-);
-
-
--- files are always bound to a mark
-CREATE TABLE uploads_per_mark (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_mark_id INT NOT NULL,
-		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
-	fk_upload_id INT NOT NULL,
-		FOREIGN KEY(fk_upload_id) REFERENCES uploads(id)
 );
 
 
