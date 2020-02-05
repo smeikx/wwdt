@@ -21,7 +21,7 @@ CREATE TABLE sessions (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	fk_project_id INT NOT NULL,
 		FOREIGN KEY(fk_project_id) REFERENCES projects(id),
-	title VARCHAR(127) NOT NULL,
+	title VARCHAR(127) NOT NULL
 );
 
 
