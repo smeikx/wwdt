@@ -119,6 +119,19 @@ CREATE TABLE contributors_per_session (
 
 
 
+CREATE TABLE metadata (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	title VARCHAR(255) NOT NULL,
+	description VARCHAR(510),
+	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	fk_creator_id INT NOT NULL,
+		FOREIGN KEY(fk_creator_id) REFERENCES contributors(id),
+	tags VARCHAR(510),
+
+	FULLTEXT (tags)
+);
+
+
 -- marks are time-bound, user-generated pieces of information
 CREATE TABLE marks (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -139,17 +152,6 @@ CREATE TABLE assets (
 	`type` VARCHAR(63) NOT NULL,
 	content TEXT NOT NULL
 );
-
-
-CREATE TABLE metadata (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	title VARCHAR(255) NOT NULL,
-	description VARCHAR(510),
-	creation_time DATE DEFAULT CURRENT_TIMESTAMP,
-	fk_creator INT NOT NULL,
-		FOREIGN KEY(fk_creator) REFERENCES contributors(id),
-	-- tags TODO: SQLicious-Fulltext, Toxi oder ein Hybrid?
-);	
 
 
 CREATE TABLE ratings_per_metadata (
@@ -176,6 +178,17 @@ CREATE TABLE metadata_per_metadata (
 );
 
 
+-- Keeps track of tags; they are not referred to from other tables.
+CREATE TABLE tags_per_session (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	fk_session_id INT NOT NULL,
+		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
+	tag VARCHAR(63),
+
+	CONSTRAINT unique_tag_per_session
+		UNIQUE (fk_session_id, tag)
+);
+
 
 -- Only for keeping track of uploads and quickly querying/filtering them;
 -- no other table refers to this table, only to the file itself.
@@ -193,34 +206,6 @@ CREATE TABLE uploads (
 	file_path VARCHAR(510) UNIQUE NOT NULL,
 	media_type TINYINT UNSIGNED,
 		FOREIGN KEY(media_type) REFERENCES media_types(id)
-);
-
-
-
-
--- tags for associating marks with each other
--- each tag exists only once per session
-CREATE TABLE tags (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_session_id INT NOT NULL,
-		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
-	title VARCHAR(63) NOT NULL,
-
-	CONSTRAINT unique_tag_per_session
-		UNIQUE (fk_session_id, title)
-);
-
-
-
-CREATE TABLE tags_per_mark (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_mark_id INT NOT NULL,
-		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
-	fk_tag_id INT NOT NULL,
-		FOREIGN KEY(fk_tag_id) REFERENCES tags(id),
-
-	CONSTRAINT unique_tag_per_mark
-		UNIQUE (fk_mark_id, fk_tag_id)
 );
 
 
