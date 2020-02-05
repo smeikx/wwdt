@@ -144,13 +144,22 @@ CREATE TABLE marks (
 );
 
 
+CREATE TABLE asset_types (
+	id TINYINT AUTO_INCREMENT PRIMARY KEY,
+	`type` VARCHAR(63) UNIQUE NOT NULL,
+	description VARCHAR(255)
+);
+
+-- Every piece of content (→ Items), that is not a Mark, is an Asset:
+-- uploads, notes, labels.
 CREATE TABLE assets (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	fk_session_id INT NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
 	fk_metadata_id INT UNIQUE NOT NULL,
 		FOREIGN KEY(fk_metadata_id) REFERENCES metadata(id),
-	`type` VARCHAR(63) NOT NULL,
+	fk_asset_type_id TINYINT UNIQUE NOT NULL,
+		FOREIGN KEY(fk_asset_type_id) REFERENCES asset_types(id),
 	content TEXT NOT NULL
 );
 
