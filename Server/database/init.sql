@@ -230,58 +230,27 @@ CREATE TABLE arrangements (
 );
 
 
-/* POSITION & SIZE
-Coordinates refer to a single cell and are relative to the centre of the grid,
-(0, 0 is the cell in the centre).
-‘width’ and ‘height’ describe how far an object extends to the right and downwards respectively.
-If width and height are both 0, the object occupies one cell.
-*/
-
-CREATE TABLE object_data (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	x INT NOT NULL,
-	y INT NOT NULL,
-	width INT UNSIGNED DEFAULT 0,
-	height INT UNSIGNED DEFAULT 0
-);
-
-
-CREATE TABLE marks_per_arrangement (
+CREATE TABLE items_per_arrangement (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	fk_arrangement_id INT NOT NULL,
 		FOREIGN KEY(fk_arrangement_id) REFERENCES arrangements(id),
-	fk_mark_id INT NOT NULL,
-		FOREIGN KEY(fk_mark_id) REFERENCES marks(id),
+	fk_metadata_id INT NOT NULL,
+		FOREIGN KEY(fk_metadata_id) REFERENCES metadata(id),
 	fk_contributor_id INT NOT NULL,
-		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
-	fk_object_data_id INT NOT NULL,
-		FOREIGN KEY(fk_object_data_id) REFERENCES object_data(id)
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id)
 );
 
-
-CREATE TABLE uploads_per_arrangement (
+-- describes arrangement of Items
+CREATE TABLE properties (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_arrangement_id INT NOT NULL,
-		FOREIGN KEY(fk_arrangement_id) REFERENCES arrangements(id),
-	fk_upload_id INT NOT NULL,
-		FOREIGN KEY(fk_upload_id) REFERENCES uploads(id),
-	fk_contributor_id INT NOT NULL,
-		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
-	fk_object_data_id INT NOT NULL,
-		FOREIGN KEY(fk_object_data_id) REFERENCES object_data(id)
-);
-
-
-CREATE TABLE labels (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_arrangement_id INT NOT NULL,
-		FOREIGN KEY(fk_arrangement_id) REFERENCES arrangements(id),
-	title VARCHAR(127) NOT NULL,
-	describtion TEXT,
-	fk_contributor_id INT NOT NULL,
-		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
-	fk_object_data_id INT NOT NULL,
-		FOREIGN KEY(fk_object_data_id) REFERENCES object_data(id)
+	fk_arranged_item_id INT NOT NULL,
+		FOREIGN KEY(fk_arranged_item_id) REFERENCES items_per_arrangement(id),
+	x FLOAT DEFAULT NULL,
+	y FLOAT DEFAULT NULL,
+	z TINYINT DEFAULT NULL,
+	scale FLOAT DEFAULT NULL,
+	`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	deleted BOOL NOT NULL DEFAULT false
 );
 
 
