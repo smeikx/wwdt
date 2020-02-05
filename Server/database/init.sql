@@ -277,32 +277,6 @@ CREATE TABLE labels (
 );
 
 
-/* XXX ONE COLUMN, MULTIPLE DIFFERENT FOREIGN KEYS
-In order to refer to different tables within one column,
-an additional column containing an enum is used to keep
-track of the referenced table:
-
-	mark → marks_per_arrangement.id
-	upload → uploads_per_arrangement.id
-	label → labels.id
-
-The enum approch has been chosen over more ‘correct’ methods,
-(like https://stackoverflow.com/a/7844911), in order to
-achieve better readability and easier to construct queries
-*/
-
-CREATE TABLE connections_per_arrangement (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_contributor_id INT NOT NULL,
-		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
-	from_object_type ENUM('mark', 'upload', 'label') NOT NULL,
-	fk_from_object_id INT NOT NULL,
-	to_object_type ENUM('mark', 'upload', 'label') NOT NULL,
-	fk_to_object_id INT NOT NULL
-	-- TODO: create a TRIGGER, as proposed here:
-	-- https://stackoverflow.com/a/56699758
-);
-
 
 CREATE TABLE permissions (
 	id INT AUTO_INCREMENT PRIMARY KEY,
