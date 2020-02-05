@@ -121,6 +121,7 @@ CREATE TABLE contributors_per_session (
 
 CREATE TABLE metadata (
 	id INT AUTO_INCREMENT PRIMARY KEY,
+	item_type ENUM('mark', 'asset') NOT NULL,
 	title VARCHAR(255) NOT NULL,
 	description VARCHAR(510),
 	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
