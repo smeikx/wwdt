@@ -75,13 +75,25 @@ CREATE TABLE contributors (
 );
 
 
+-- allows to track who participated in a session without them directly uploading anything
+CREATE TABLE contributors_per_session (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	fk_session_id INT NOT NULL,
+		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
+	fk_contributor_id INT NOT NULL,
+		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
+
+	CONSTRAINT unique_contributor_per_session
+		UNIQUE (fk_session_id, fk_contributor_id)
+);
+
+
 -- combine project and session roles for structural simplicity
 CREATE TABLE roles (
 	id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(127) UNIQUE NOT NULL,
 	description VARCHAR(127)
 );
-
 
 CREATE TABLE role_per_project (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -93,7 +105,6 @@ CREATE TABLE role_per_project (
 		FOREIGN KEY(fk_role_id) REFERENCES roles(id)
 );
 
-
 CREATE TABLE role_per_session (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	fk_session_id INT NOT NULL,
@@ -102,19 +113,6 @@ CREATE TABLE role_per_session (
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	fk_role_id TINYINT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_role_id) REFERENCES roles(id)
-);
-
-
--- allows to track who participated in a session without them directly uploading anything
-CREATE TABLE contributors_per_session (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_session_id INT NOT NULL,
-		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
-	fk_contributor_id INT NOT NULL,
-		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
-
-	CONSTRAINT unique_contributor_per_session
-		UNIQUE (fk_session_id, fk_contributor_id)
 );
 
 
