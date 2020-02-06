@@ -34,14 +34,6 @@ CREATE TABLE segments (
 );
 
 
--- known types of media files
-CREATE TABLE media_types (
-	id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	media_type VARCHAR(63) NOT NULL UNIQUE,
-	description VARCHAR(510)
-);
-
-
 
 -- (semi) automatic recordings (audio & video)
 CREATE TABLE recordings (
@@ -142,6 +134,7 @@ CREATE TABLE marks (
 );
 
 
+-- used to describe the type of an Asset or Upload
 CREATE TABLE asset_types (
 	id TINYINT AUTO_INCREMENT PRIMARY KEY,
 	`type` VARCHAR(63) UNIQUE NOT NULL,
@@ -210,10 +203,9 @@ CREATE TABLE uploads (
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	upload_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	upload_name VARCHAR(255) NOT NULL,
-	display_name VARCHAR(255) NOT NULL,
 	file_path VARCHAR(510) UNIQUE NOT NULL,
-	media_type TINYINT UNSIGNED,
-		FOREIGN KEY(media_type) REFERENCES media_types(id)
+	asset_type TINYINT,
+		FOREIGN KEY(asset_type) REFERENCES asset_types(id)
 );
 
 
