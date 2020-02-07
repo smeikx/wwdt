@@ -117,7 +117,7 @@ CREATE TABLE metadata (
 	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	fk_creator_id INT NOT NULL,
 		FOREIGN KEY(fk_creator_id) REFERENCES contributors(id),
-	tags VARCHAR(510),
+	tags VARCHAR(510), -- newline (\n) is the separator
 
 	FULLTEXT (tags)
 );
