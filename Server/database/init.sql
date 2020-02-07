@@ -30,7 +30,7 @@ CREATE TABLE segments (
 	fk_session_id INT NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
 	start_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	end_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+	end_time DATETIME DEFAULT NULL -- if NULL → currently running
 );
 
 
