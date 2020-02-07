@@ -9,7 +9,7 @@ USE tisch;
 
 
 CREATE TABLE projects (
-	id INT AUTO_INCREMENT PRIMARY KEY,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(127) NOT NULL UNIQUE,
 	creation_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	description VARCHAR(2047)
@@ -18,16 +18,16 @@ CREATE TABLE projects (
 
 
 CREATE TABLE sessions (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_project_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_project_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_project_id) REFERENCES projects(id),
 	title VARCHAR(127) NOT NULL
 );
 
 
 CREATE TABLE segments (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_session_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_session_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
 	start_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	end_time DATETIME DEFAULT NULL -- if NULL → currently running
@@ -37,8 +37,8 @@ CREATE TABLE segments (
 
 -- (semi) automatic recordings (audio & video)
 CREATE TABLE recordings (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_session_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_session_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
 	recording_type ENUM('audio', 'video') NOT NULL,
 	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -48,8 +48,8 @@ CREATE TABLE recordings (
 
 
 CREATE TABLE transcripts (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_record_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_record_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_record_id) REFERENCES recordings(id),
 	file_path VARCHAR(255) NOT NULL UNIQUE
 );
@@ -59,7 +59,7 @@ CREATE TABLE transcripts (
 -- list of all contributors
 -- XXX: password not yet in use!
 CREATE TABLE contributors (
-	id INT AUTO_INCREMENT PRIMARY KEY,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	email_address VARCHAR(254) NOT NULL UNIQUE, -- https://stackoverflow.com/a/7717596
 	forename VARCHAR(127) NOT NULL,
 	surname VARCHAR(127),
@@ -69,10 +69,10 @@ CREATE TABLE contributors (
 
 -- allows to track who participated in a session without them directly uploading anything
 CREATE TABLE contributors_per_session (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_session_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_session_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
-	fk_contributor_id INT NOT NULL,
+	fk_contributor_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 
 	CONSTRAINT unique_contributor_per_session
@@ -88,20 +88,20 @@ CREATE TABLE roles (
 );
 
 CREATE TABLE role_per_project (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_project_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_project_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_project_id) REFERENCES projects(id),
-	fk_contributor_id INT NOT NULL,
+	fk_contributor_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	fk_role_id TINYINT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_role_id) REFERENCES roles(id)
 );
 
 CREATE TABLE role_per_session (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_session_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_session_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
-	fk_contributor_id INT NOT NULL,
+	fk_contributor_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	fk_role_id TINYINT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_role_id) REFERENCES roles(id)
@@ -110,12 +110,12 @@ CREATE TABLE role_per_session (
 
 
 CREATE TABLE metadata (
-	id INT AUTO_INCREMENT PRIMARY KEY,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	item_type ENUM('mark', 'asset') NOT NULL,
 	title VARCHAR(255) NOT NULL,
 	description VARCHAR(510),
 	creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	fk_creator_id INT NOT NULL,
+	fk_creator_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_creator_id) REFERENCES contributors(id),
 	tags VARCHAR(510), -- newline (\n) is the separator
 
@@ -125,10 +125,10 @@ CREATE TABLE metadata (
 
 -- marks are time-bound, user-generated pieces of information
 CREATE TABLE marks (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_session_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_session_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
-	fk_metadata_id INT UNIQUE NOT NULL,
+	fk_metadata_id INT UNSIGNED UNIQUE NOT NULL,
 		FOREIGN KEY(fk_metadata_id) REFERENCES metadata(id),
 	`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -136,7 +136,7 @@ CREATE TABLE marks (
 
 -- used to describe the type of an Asset or Upload
 CREATE TABLE asset_types (
-	id TINYINT AUTO_INCREMENT PRIMARY KEY,
+	id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	`type` VARCHAR(63) UNIQUE NOT NULL,
 	description VARCHAR(255)
 );
@@ -144,24 +144,24 @@ CREATE TABLE asset_types (
 -- Every piece of content (→ Items), that is not a Mark, is an Asset:
 -- uploads, notes, labels.
 CREATE TABLE assets (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_session_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_session_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
-	fk_metadata_id INT UNIQUE NOT NULL,
+	fk_metadata_id INT UNSIGNED UNIQUE NOT NULL,
 		FOREIGN KEY(fk_metadata_id) REFERENCES metadata(id),
-	fk_asset_type_id TINYINT UNIQUE NOT NULL,
+	fk_asset_type_id TINYINT UNSIGNED UNIQUE NOT NULL,
 		FOREIGN KEY(fk_asset_type_id) REFERENCES asset_types(id),
 	content TEXT NOT NULL
 );
 
 
 CREATE TABLE ratings_per_metadata (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_metadata_id INT UNIQUE NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_metadata_id INT UNSIGNED UNIQUE NOT NULL,
 		FOREIGN KEY(fk_metadata_id) REFERENCES metadata(id),
-	fk_contributor_id INT NOT NULL UNIQUE,
+	fk_contributor_id INT UNSIGNED NOT NULL UNIQUE,
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
-	rating TINYINT NOT NULL,
+	rating TINYINT UNSIGNED NOT NULL,
 
 	CONSTRAINT unique_rating_per_user_per_metadata
 		UNIQUE (fk_metadata_id, fk_contributor_id)
@@ -170,10 +170,10 @@ CREATE TABLE ratings_per_metadata (
 
 -- Items can refer to multiple other items.
 CREATE TABLE metadata_per_metadata (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_from_metadata_id INT UNIQUE NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_from_metadata_id INT UNSIGNED UNIQUE NOT NULL,
 		FOREIGN KEY(fk_from_metadata_id) REFERENCES metadata(id),
-	fk_to_metadata_id INT UNIQUE NOT NULL,
+	fk_to_metadata_id INT UNSIGNED UNIQUE NOT NULL,
 		FOREIGN KEY(fk_to_metadata_id) REFERENCES metadata(id),
 	title VARCHAR(127)
 );
@@ -181,8 +181,8 @@ CREATE TABLE metadata_per_metadata (
 
 -- Keeps track of tags; they are not referred to from other tables.
 CREATE TABLE tags_per_session (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_session_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_session_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
 	tag VARCHAR(63),
 
@@ -196,25 +196,25 @@ CREATE TABLE tags_per_session (
 -- Paths match the following pattern:
 -- …/project_title-id/session_title-id/contributor_name-id/upload_id.foo
 CREATE TABLE uploads (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_session_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_session_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
-	fk_contributor_id INT NOT NULL,
+	fk_contributor_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	upload_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	upload_name VARCHAR(255) NOT NULL,
 	file_path VARCHAR(510) UNIQUE NOT NULL,
-	asset_type TINYINT,
+	asset_type TINYINT UNSIGNED,
 		FOREIGN KEY(asset_type) REFERENCES asset_types(id)
 );
 
 
 
 CREATE TABLE arrangements (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_session_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_session_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_session_id) REFERENCES sessions(id),
-	fk_contributor_id INT NOT NULL,
+	fk_contributor_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id),
 	title VARCHAR(127) NOT NULL,
 	description VARCHAR(510),
@@ -223,23 +223,23 @@ CREATE TABLE arrangements (
 
 
 CREATE TABLE items_per_arrangement (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_arrangement_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_arrangement_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_arrangement_id) REFERENCES arrangements(id),
-	fk_metadata_id INT NOT NULL,
+	fk_metadata_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_metadata_id) REFERENCES metadata(id),
-	fk_contributor_id INT NOT NULL,
+	fk_contributor_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_contributor_id) REFERENCES contributors(id)
 );
 
 -- describes arrangement of Items
 CREATE TABLE properties (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	fk_arranged_item_id INT NOT NULL,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	fk_arranged_item_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_arranged_item_id) REFERENCES items_per_arrangement(id),
 	x FLOAT DEFAULT NULL,
 	y FLOAT DEFAULT NULL,
-	z TINYINT DEFAULT NULL,
+	z TINYINT UNSIGNED DEFAULT NULL,
 	scale FLOAT DEFAULT NULL,
 	`timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	deleted BOOL NOT NULL DEFAULT false
@@ -248,16 +248,16 @@ CREATE TABLE properties (
 
 
 CREATE TABLE permissions (
-	id INT AUTO_INCREMENT PRIMARY KEY,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(127) NOT NULL,
 	description VARCHAR(510)
 );
 
 CREATE TABLE permission_per_role (
-	id INT AUTO_INCREMENT PRIMARY KEY,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	fk_role_id TINYINT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_role_id) REFERENCES roles(id),
-	fk_permission_id INT NOT NULL,
+	fk_permission_id INT UNSIGNED NOT NULL,
 		FOREIGN KEY(fk_permission_id) REFERENCES permissions(id)
 );
 
