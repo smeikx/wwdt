@@ -1,24 +1,23 @@
--- last tested with mariadb Ver 15.1 Distrib 10.4.10-MariaDB
+-- inserts default data that helps quickly using the database after init
+-- last tested with mariadb Ver 15.1 Distrib 10.4.11-MariaDB
 
-INSERT INTO project_roles
+USE tisch;
+
+
+INSERT INTO roles
 	(title, description)
 VALUES
-	('Project Manager', 'kann Rollen verteilen');
+	-- session roles
+	('Moderation', 'startet, stoppt und verwaltet eine Session');
 
 
-INSERT INTO session_roles
-	(title, description)
+INSERT INTO asset_types
+	(`type`, description)
 VALUES
-	('Chairperson', 'initiiert und leitet Sitzung, kann Rollen verteilen'),
-	('Content Manager', 'bringt Beiträge in einheitliche Form');
-
-
-INSERT INTO media_types
-	(media_type)
-VALUES
-	('video'),
-	('audio'),
-	('image'),
-	('text'),
-	('unknown');
+	('video', 'video file'),
+	('audio', 'audio file'),
+	('url', 'web link'),
+	('document', 'arbitrary file'),
+	('internal plain text', 'plain text, contained in the database'),
+	('label', 'a label inside an arrangement');
 
