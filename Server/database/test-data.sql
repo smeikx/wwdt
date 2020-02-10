@@ -23,10 +23,10 @@ VALUES
 	('finn@maths.pb', 'Finn', NULL),
 	('krabby-patty@bikinibottom.co', 'Spongebob', NULL);
 
-SET @user1 = (SELECT id FROM contributor WHERE email_address = 'bo@jack.ch');
-SET @user2 = (SELECT id FROM contributor WHERE email_address = 'star@mewni.com');
-SET @user3 = (SELECT id FROM contributor WHERE email_address = 'krabby-patty@bikinibottom.ru');
-SET @user4 = (SELECT id FROM contributor WHERE email_address = 'finn@maths.pb');
+SET @user1 = (SELECT id FROM contributors WHERE email_address = 'bo@jack.ch');
+SET @user2 = (SELECT id FROM contributors WHERE email_address = 'star@mewni.com');
+SET @user3 = (SELECT id FROM contributors WHERE email_address = 'krabby-patty@bikinibottom.co');
+SET @user4 = (SELECT id FROM contributors WHERE email_address = 'finn@maths.pb');
 
 
 
