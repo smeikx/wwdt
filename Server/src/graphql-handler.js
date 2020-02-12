@@ -4,14 +4,14 @@ const { parse, graphql, buildSchema } = require('graphql');
 const { readFileSync } = require('fs');
 const db = require('./database').pool;
 
-const schemaFile = 'schema.graphql';
+const schema_file = 'schema.graphql';
 let schema;
 
 // parse schema
 try
 {
-	const fileContent = readFileSync(schemaFile, 'utf8');
-	schema = buildSchema(fileContent);
+	const file_content = readFileSync(schema_file, 'utf8');
+	schema = buildSchema(file_content);
 }
 catch (error)
 {
@@ -33,8 +33,9 @@ const root =
 };
 
 
-exports.query = async (requestString) =>
+exports.query = async (request_string, user_id) =>
 {
-	return await graphql(schema, requestString, root);
+	// TODO: check user permissions
+	return await graphql(schema, request_string, root);
 }
 
