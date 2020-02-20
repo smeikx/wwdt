@@ -35,7 +35,10 @@ class SelectionIterable
 					yield frag_selection;
 			}
 			else
-				yield selection.name.value;
+				yield {
+					name: selection.name.value,
+					sub_selections: selection.selectionSet.selections
+				};
 		}
 	}
 }
