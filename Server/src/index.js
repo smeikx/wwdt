@@ -20,12 +20,10 @@ http.createServer((request, response) =>
 	const { user_id } =
 		request.headers.hasOwnProperty('cookie') ?
 		parseCookies(request.headers.cookie) : {};
-	console.log(user_id);
 
 
 	// auth || query
 	const target = basename(request.url);
-	console.log(target);
 
 	const user_logged_in = isLoggedIn(user_id);
 
@@ -48,12 +46,9 @@ http.createServer((request, response) =>
 
 		request.on('end', () =>
 		{
-			console.log(`\nrequest:\n${body}`);
 			gql.query(body)
 				.then(result =>
 				{
-					console.log(`\nresult:`)
-					console.log(inspect(result, {depth: Infinity, showHidden: true, colors: true}));
 					response.setHeader('Content-Type', 'text/plain');
 					response_data = JSON.stringify(result, null, 2);
 				})
