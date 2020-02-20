@@ -3,7 +3,6 @@
 'use strict';
 
 const http = require('http');
-const fs = require('fs');
 const { basename } = require('path');
 const parseUrl = require('url').parse;
 

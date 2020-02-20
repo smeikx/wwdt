@@ -1,21 +1,30 @@
 'use strict';
 
 const { parse, graphql, buildSchema } = require('graphql');
-const { readFileSync } = require('fs');
 const db = require('./database').pool;
 
-const schema_file = 'schema.graphql';
 let schema;
 
 // parse schema
 try
 {
-	const file_content = readFileSync(schema_file, 'utf8');
+	const { readFileSync } = require('fs');
+
+	const schema_files = [
+		'gql-schema/types.graphql',
+		'gql-schema/query.graphql',
+		'gql-schema/mutation.graphql'
+	];
+
+	let file_content = '';
+	for (const file of schema_files)
+		file_content += readFileSync(file, 'utf8') + '\n';
+
 	schema = buildSchema(file_content);
 }
 catch (error)
 {
-	console.error('Trouble parsing the schema file.');
+	console.error('Trouble parsing the schema files.');
 	throw error;
 }
 
