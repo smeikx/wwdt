@@ -1,7 +1,7 @@
 'use strict';
 
 const { parse, graphql, buildSchema } = require('graphql');
-const db = require('./database').pool;
+const root = require('./resolvers');
 
 let schema;
 
@@ -27,19 +27,6 @@ catch (error)
 	console.error('Trouble parsing the schema files.');
 	throw error;
 }
-
-
-// define functions
-const root =
-{
-	projects: async () =>
-	{
-		const result = await db.query('SELECT id, title FROM projects;');
-		delete result.meta;
-		return result;
-	},
-	test: () => 'tested successfully'
-};
 
 
 exports.query = async (request_string, user_id) =>
