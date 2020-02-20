@@ -50,6 +50,7 @@ http.createServer((request, response) =>
 				.then(result =>
 				{
 					response.setHeader('Content-Type', 'text/plain');
+					response_code = 200;
 					response_data = JSON.stringify(result, null, 2);
 				})
 				.catch(error => 
