@@ -7,7 +7,5 @@ then
 	PORT=$1
 fi
 
-echo $PORT
-
-curl -H "Content-Type: text/plain" localhost:$PORT -d @-
+curl -H "Content-Type: text/plain" localhost:$PORT/query -d @-
 
