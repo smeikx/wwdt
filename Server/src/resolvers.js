@@ -46,6 +46,10 @@ async function resolve ({info, selections, fragments, descriptor, dependencies})
 	const columns = [];
 	for (const selection of new Selections({info}))
 	{
+		if (descriptor.nested_fields.hasOwnProperty(selection.name))
+			;
+		else
+			//columns.push(selection.name);
 	}
 }
 
