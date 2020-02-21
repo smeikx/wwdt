@@ -1,0 +1,104 @@
+### SCALARS ########################################
+
+"milliseconds since 1970-01-01, 00:00:00 UTC"
+scalar Datetime 
+
+"URL is just a regular String"
+scalar URL
+
+
+type Project
+{
+	id: ID!
+	title: String!
+	creationTime: Datetime!
+	description: String
+	sessions: [Session!]
+	contributors: [Contributor!]
+}
+
+
+type Session
+{
+	id: ID!
+	title: String!
+	project: Project!
+	contributors: [Contributor!]
+	segments: [Segment!]
+	recordings: [Recording]
+	assets: [Asset!]
+	marks: [Mark!]
+}
+
+
+type Segment
+{
+	id: ID!
+	session: Session!
+	startTime: Datetime!
+	endTime: Datetime " NULL → currently running
+	recordings: [Recording]
+}
+
+
+type Recording
+{
+	id: ID!
+	url: URL!
+	creationTime: Datetime!
+	duration: Int!
+	mediaType: RecordingType!
+}
+
+enum RecordingType
+{
+	AUDIO
+	VIDEO
+}
+
+
+type Contributor
+{
+	id: ID!
+	email: String!
+	forename: String!
+	surname: String
+	projectRole: Role
+	sessionRole: Role
+	uploads: [Upload!]
+	marks: [Mark!]
+	arrangements: [Arrangement!]
+	sessions: [Session!]
+}
+
+interface Contribution
+{
+	id: ID!
+	title: String
+	description: String
+	creationTime: Datetime!
+	creator: Contributor!
+	tags: [String!]
+	rating: Int
+}
+
+
+type Asset implements Contributon
+{
+	id: ID!
+	title: String
+	description: String
+	creationTime: Datetime!
+	creator: Contributor!
+	tags: [String!]
+	description: String
+	session: Session!
+	type: String!
+}
+
+
+type Mark implements Contributor
+{
+
+}
+

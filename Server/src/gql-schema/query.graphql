@@ -1,0 +1,7 @@
+type Query
+{
+	projects: [Project!]
+	project (id: ID!): Project!
+	session (id: ID!): Session!
+	test: String!
+}
