@@ -108,7 +108,7 @@ CREATE TABLE role_per_session (
 );
 
 
-
+-- every item, both Marks and Assets, refers to this table
 CREATE TABLE metadata (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	item_type ENUM('mark', 'asset') NOT NULL,
