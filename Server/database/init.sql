@@ -8,6 +8,11 @@ USE tisch;
 
 
 
+CREATE OR REPLACE USER tisch@localhost;
+GRANT DELETE, INSERT, SELECT, UPDATE ON tisch.* TO tisch@localhost;
+
+
+
 CREATE TABLE projects (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(127) NOT NULL UNIQUE,
